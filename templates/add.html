@@ -15,7 +15,7 @@
         {% else %}
         {% if current_user.id == 1 %}
             <a class="login" href="{{ url_for('referral') }}">Active referrals</a>
-            <a class="login" href="{{ url_for('get_accounts') }}">{{ data|length - 2 }} Accounts</a>
+            <a class="login" href="{{ url_for('get_accounts') }}">{{ data|length }} Accounts</a>
             <a class="login" href="{{ url_for('get_user') }}">{{ tech|length }} Tech</a>
             <a class="login" href="{{ url_for('get_post') }}">{{ post|length }} Post</a>
 
