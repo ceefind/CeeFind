@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CeeFind</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+ 
+</head>
+<body>
+	<div class="register">
+		<a class="login" href="{{ url_for('home') }}">Home</a>
+	</div>
+	<div class="label">
+		<div>
+			<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+			<p class="def">ver<span class="span">ify</span> your prof<span class="span">ile</span></p>
+		</div>
+	</div>
+    <h1
+    style="
+        display: flex;
+        width: 100%;
+        font-size: 20px;
+        background-color: aqua;
+        color: white;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        height: 60px;">
+        Upload documents
+    </h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p
+                style="color: red;
+                text-align: center;">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form 
+        class="appeal" 
+        style="
+            min-width: 350px;
+            max-width: 600px;
+            min-height: 250px;"
+        method="post"
+        action="{{ url_for('appeal', id=post.id)}}"
+        enctype="multipart/form-data">
+
+        {{ form.csrf_token }}
+        {{ form.image.label }} {{ form.image() }}
+        {{ form.submit }}
+
+    </form>
+</body>
+</html>

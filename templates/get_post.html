@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ceefind</title>
+    <link rel="stylesheet" href="static/styles.css">
+ 
+</head>
+<body>
+    <div class="register">
+    {% if current_user.id == 1 %}
+  		<a class="login" href="{{ url_for('home') }}">Home</a>
+  		<a class="login" href="{{ url_for('referral') }}">Active referrals</a>
+  		<a class="login" href="{{ url_for('get_accounts') }}">{{ data|length }} Accounts</a>
+  		<a class="login" href="{{ url_for('get_user') }}">{{ tech|length }} Tech</a>
+  		<a class="login" href="{{ url_for('logout') }}">logout</a>
+    {% endif %}
+  	</div>
+  	<div class="label">
+    	<div class="hero-text">
+      		<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+      		<h2 class="def">inst<span class="span">antly b</span>ook your rep<span class="span">airs</span></h2>
+    	</div>
+  	</div>
+   
+  	<div class="bottom-nav">
+    	<div>
+  			<a href="{{ url_for('home') }}"
+    	 		class="{% if active_page == 'home' %}active{% endif %}">
+     			🏠
+  			</a>
+  			<a href="{{ url_for('add_product') }}"
+    			class="{% if active_page == 'add_product' %}active{% endif %}">
+     			➕
+  			</a>
+
+  			<a href="{{ url_for('profile_page') }}"
+     			class="{% if active_page == 'profile' %}active{% endif %}">
+     			👤
+  			</a>
+  		</div>
+	</div>
+  	<div class="random">
+  {% for p in post %}
+    	<div style="
+			position: relative;
+  			display: block;
+  			margin: 10px auto;
+  			width: 100%;
+  			height: 350px;
+  			text-align: center;
+  			border: 2px solid green;
+  			border-bottom-right-radius: 35px;
+  			border-top-right-radius: 35px;
+  			border-bottom-left-radius: 35px;
+  			">
+      		<img style="
+				margin-bottom: 0;" 
+				src="{{ url_for('uploaded_file', filename=p.image) }}"/>
+  
+       		<h3 style="font-size: 12px; margin-top: 0;" class="p-details">Id: {{ p.id }}</h3>
+       		<h3 style="font-size: 12px; margin-top: 0;" class="p-details">Name: {{ p.name }}</h3>
+       		<h3 style="font-size: 12px; margin-top: 0;" class="p-details">seller: {{ p.author.firstname }}</h3>
+       		<h3 style="font-size: 12px; margin-top: 0;" class="p-details">Email Adress: {{ p.author.email }}</h3>
+  {% if p.is_suspended %}
+       {% for report in report %}
+       {% if report.reporter != p.author %}
+       		<h3 style="font-size: 12px;" class="p-details">reporters: {{ report.reporter.firstname }}</h3>
+       {% endif %}
+       {% endfor %}
+       		<h3 style="
+                 color:red; 
+                 transform:rotate(45deg); 
+                 border:1px dashed red;
+                 z-index: 1001;
+                 position: absolute;
+                 bottom: 150px;
+				 left: 40px;
+                 padding: 10px;
+                 font-size: 20px;
+                 
+     ">post suspended</h3>
+  {% endif %}
+       		<a 
+				style="
+					display: block;
+  					border-radius: 20px;
+  					width: 60%;
+  					background-color: white;
+  					padding: 5px;
+  					color:green;
+  					font-size: 15px;
+  					font-weight: bold;
+  					left: 17%;
+  					position: absolute;
+  					bottom: 74px;" 
+				href="{{ url_for('view_appeal', id=p.id) }}">
+				view appeal
+			</a>
+       		<a 
+				id="delete-post" 
+				href="{{ url_for('product_view', id=p.id) }}">
+				review post
+			</a>
+       		<a 
+				style="
+					display: block;
+  					border-radius: 20px;
+  					width: 60%;
+  					background-color: white;
+  					padding: 5px;
+  					color:green;
+  					font-size: 15px;
+  					font-weight: bold;
+  					left: 17%;
+  					position: absolute;
+  					bottom: 16px;" 
+				href="{{ url_for('clear', id=p.id) }}">
+				Remove Flag
+			</a>
+  		</div>
+  {% endfor %}
+    </div>
+  
+    <div class="bottom-block">
+    </div>
+</body>
+</html>
+
+

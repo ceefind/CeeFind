@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <link rel="stylesheet" href="static/styles.css">
+ 
+</head>
+<body>
+    <div class="register">
+        {% if not logged_in %}
+            <a class="login" href="{{ url_for('login') }}">login</a>
+            <a class="login" href="{{ url_for('register') }}">register</a>
+        {% else %}
+        {% if current_user.id == 1 %}
+            <a class="login" href="{{ url_for('referral') }}">Active referrals</a>
+            <a class="login" href="{{ url_for('get_accounts') }}">{{ data|length - 2 }} Accounts</a>
+            <a class="login" href="{{ url_for('get_user') }}">{{ tech|length }} Tech</a>
+            <a class="login" href="{{ url_for('get_post') }}">{{ post|length }} Post</a>
+
+        {% endif %}
+            <a class="login" href="{{ url_for('logout') }}">logout</a>
+        {% endif %}
+    </div>
+    <div class="label">
+        <div class="hero-text">
+            <h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+            <h2 class="def">Adv<span class="span">ertise</span> your pr<span class="span">oducts</span></h2>
+        </div>
+    </div>
+   
+    <div class="bottom-nav">
+        <div>
+            <a href="{{ url_for('home') }}"
+                class="{% if active_page == 'home' %}active{% endif %}">
+                🏠
+            </a>
+
+            <a href="{{ url_for('add_product') }}"
+                 class="{% if active_page == 'add_product' %}active{% endif %}">
+                 ➕
+            </a>
+
+            <a href="{{ url_for('profile_page') }}"
+                class="{% if active_page == 'profile' %}active{% endif %}">
+                👤
+            </a>
+        </div>
+    </div>
+    <div class="box-container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% if not logged_in %}
+            <h1>Login to Advertise your product</h1>
+        {% else %}
+        {% if current_user.is_verified %}
+            <form 
+            style="
+                padding: 20px auto;
+                min-width: 350px;
+                max-width: 600px;
+                " 
+            class="login-form"
+            method="post" 
+            action="{{ url_for('add_product') }}" 
+            enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                {{ form.name.label }} {{ form.name }}
+                {{ form.category.label }} {{ form.category }}
+                {{ form.image.label }} {{ form.image }}
+                {{ form.price.label }} {{ form.price }}
+                {{ form.state.label }} {{ form.state }}
+                <label>Location</label>
+                <button style="height: 27px; font-size: 15px; margin-top: 2px; margin-bottom: 10px;" type="button" onclick="getLocation()">Use My Location</button>
+                {{ form.label.label }} {{ form.label }}
+                {{ form.negotiable.label }} {{ form.negotiable }}
+                {{ form.contact.label }} {{ form.contact }}
+                {{ form.latitude(id="latitude") }}
+                {{ form.longitude(id="longitude") }}
+                {{ form.submit }}
+            </form>
+        {% else %}
+            <p style="font-size: 20px;
+                text-align: center;
+                width: 60%;
+                display: block;
+                margin: auto">
+                only verified user's can advertise here.
+            </p>
+            <a style="
+                width: 40%;
+                display: block;
+                margin: auto;
+                color: white;
+                background-color: green;
+                text-align: center;
+                border-radius: 10px;
+                padding: 2px;" 
+                href="{{ url_for('verify', email=current_user.email) }}">
+                verify your email
+            </a>
+        {% endif %}
+    </div>
+  {% endif %}
+<script>
+  function getLocation() {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      document.getElementById("latitude").value = position.coords.latitude;
+      document.getElementById("longitude").value = position.coords.longitude;
+    });
+  } else {
+    alert("Geolocation not supported.");
+  }
+}
+</script>
+</body>
+</html>
+
+

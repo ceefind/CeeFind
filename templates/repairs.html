@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>CeeFind</title>
+	<link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+	<div class="bottom-nav">
+		<div>
+			<a href="{{ url_for('home') }}"
+		 		class="{% if active_page == 'home' %}active{% endif %}">
+		 		🏠
+			</a>
+
+			<a href="{{ url_for('add_product') }}"
+		 		class="{% if active_page == 'add' %}active{% endif %}">
+		 		➕
+			</a>
+
+			<a href="{{ url_for('profile_page') }}"
+		 		class="{% if active_page == 'profile' %}active{% endif %}">
+		 		👤
+			</a>
+	</div>
+</div>
+	
+	<div class="register">
+		{% if not logged_in %}
+		<a class="login" href="{{ url_for('login') }}">login</a>
+		<a class="login" href="{{ url_for('register') }}">register</a>
+		{% else %}
+		<a class="login" href="{{ url_for('home') }}">home</a>
+		<a class="login" href="{{ url_for('logout') }}">logout</a>
+		{% endif %}
+	</div>
+	<div class="label">
+		<div class="hero-text">
+			<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+			<h2 class="def">inst<span class="span">antly b</span>ook your rep<span class="span">airs</span></h2>
+		</div>
+	</div>
+	<nav class="navbar">
+		<a class="nav" href="{{ url_for('home') }}">Home</a>
+		<a class="nav" href="{{ url_for('s_l') }}">Sales/Lease</a>
+		<a class="nav" href='{{ url_for("view_tech") }}'>Engineers</a>
+	</nav>
+	<div id="status-selector">
+	<select id="jobs">
+			<option value="all">Skill</option>
+			<option value="Electrician">Electrician</option>
+			<option value="Developer">Developer</option>
+			<option value="Baker">Baker</option>
+			<option value="Plumber">Plumber</option>
+			<option value="Car Mechanic">Car Mechanic</option>
+			<option value="Gen Mechanic">Gen Mechanic</option>
+			<option value="Furniture_Roof">Furniture_Roof</option>
+	</select>
+	<select id="states"></select>
+	</div>
+	<button style="
+				height: auto;" 
+			class="find" 
+			onclick="findNearby()">
+			Find Nearby Technicians
+	</button>
+	<div style="
+			display: grid;
+			gap: 30px;
+			width: 100%;
+			padding: 10px;
+			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));" 
+		class="random">
+	{% for p in prof %}
+		<div style="
+				width: 90%;" 
+			class="items">
+			{% if p.image %}
+			<div class="p-img-box">
+				<img style="
+					display: block;
+					margin: auto;
+					width: 100px;
+					height: 100px;
+					border-radius: 50%;" 
+					class="p-img" 
+					src="{{ url_for('uploaded_file', filename=p.image) }}" alt="photo of {{ p.shop_name }}"/>
+			
+			</div>
+			{% else %}
+			<p> No image uploaded </p>
+			{% endif %}
+			<h2 class="profile-card">Name: {{ p.shop_name }}</h2>
+			<h3 class="p-details">Career: {{ p.career }}</h3>
+			<h3 class="p-details">Address: {{ p.state }}</h3>
+			{% if not logged_in %}
+			<h3 id="pContact" class="p-details">Contact: ****</h3>
+			{% else %}
+			<h3 id="pContact" class="p-details">Contact: {{ p.contact }}</h3>
+			{% endif %}
+			<h3 class="p-details">Working Hours: {{ p.working_hours }} </h3>
+			{% if not logged_in %}
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+					{% for message in messages %}
+						<p class="message">{{ message }}</p>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+			<a href="#">View Contact</a>
+			{% else %}
+			<a style="margin-top: 5px;" href="{{ url_for('profile_view', name=p.shop_name) }}">View</a>
+			{% endif %}
+		</div>
+	{% endfor %}
+	</div>
+	<div class="bottom-block">
+	</div>
+	<script>
+	const states = ["All","Abia","Adamawa","Akwa Ibom","Anambra","Bauchi","Bayelsa","Benue","Bornu","Crossriver","Delta","Ebonyi","Edo","Ekiti","Enugu","Gombe","Imo","Jigawa","Kaduna","Kano","Katsina","Kebbi","Kogi","Kwara","Lagos","Nassarawa","Niger","Ogun","Ondo","Osun","Oyo","Plateau","Rivers","Sokoto","Taraba","Yobe","Zamfara","FCT"]
+	const getState = document.getElementById('states');
+	states.forEach((state) => {
+		const option = document.createElement('option')
+		option.value = state
+		option.text = state
+		getState.add(option)
+})
+	const selected = document.getElementById('jobs');
+	
+
+	selected.addEventListener('change', filterProfiles);
+	getState.addEventListener('change', filterProfiles);
+
+	function filterProfiles() {
+		const profile = document.querySelectorAll('.items');
+		profile.forEach((pro) => {
+			const careerMatch = pro.querySelector('.p-details').textContent.includes(selected.value);
+			const stateMatch = pro.querySelectorAll('.p-details')[1].textContent.includes(getState.value);
+			pro.style.display = (careerMatch || selected.value === 'all') && (stateMatch || getState.value === 'All') ? 'block' : 'none';
+		});
+	}
+
+	function findNearby() {
+		if(navigator.geolocation){
+			navigator.geolocation.getCurrentPosition(sendPosition, showError)
+	} else {
+			alert("Geolocation is not supported by this browser.")
+		}
+	}
+	function sendPosition(position){
+		let latitude = position.coords.latitude
+		let longitude = position.coords.longitude
+	
+		fetch("/save-location", { method: "POST", headers: {"Content-Type":"application/json"},
+				body: JSON.stringify({lat:latitude, lng:longitude})
+			})
+	}
+	function showError(error){
+		alert("Location access denied.")
+		}
+	</script>
+</body>
+</html>
+
+
+																																																																																																																																																																																												

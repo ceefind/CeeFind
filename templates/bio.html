@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>CeeFind</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <form 
+    style="width: 80%;"
+        method="post" 
+        action="{{ url_for('bio_edit', shopname=user.shop_name)}}">
+        {{ form.csrf_token }}
+        {{ form.bio.label }} {{ form.bio() }}
+        {{ form.submit }}
+    </form>
+</body>
+</html>

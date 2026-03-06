@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>CeeFind</title>
+  <link rel="stylesheet" href="static/styles.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+  <h2>Nearby Technicians</h2>
+
+<div id="map"></div>
+{% for tech, distance in results %}
+  <div>
+    <h3>{{ tech.name }}</h3>
+    <p>{{ "%.2f"|format(distance) }} km away</p>
+  </div>
+{% endfor %}
+  <sript src="https://unpkg.com/leaflet/dist/leaflet.js">
+    var map = L.map('map').setView([{{ user_lat }}, {{ user_lng }}], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // User marker
+    L.marker([{{ user_lat }}, {{ user_lng }}])
+        .addTo(map)
+        .bindPopup("You are here")
+        .openPopup();
+
+    var technicians = {{ technicians | tojson }};
+
+    technicians.forEach(function(tech) {
+        L.marker([tech.lat, tech.lng])
+            .addTo(map)
+            .bindPopup("<b>" + tech.name + "</b>");
+    });
+  </script>
+</body>
+</html>
+

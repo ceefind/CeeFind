@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CeeFind</title>
+    <link rel="stylesheet" href="static/styles.css">
+ 
+</head>
+<body>
+    <div class="bottom-nav">
+        <div>
+            <a href="{{ url_for('home') }}"
+                class="{% if active_page == 'home' %}active{% endif %}">
+                🏠
+            </a>
+  {% if not logged_in %}
+            <a href="{{ url_for('login') }}">
+                ➕
+            </a>
+  {% endif %}
+            <a href="#"
+                class="{% if active_page == 'profile' %}active{% endif %}">
+                👤
+            </a>
+        </div>
+    </div>
+    <div class="register">
+        <a class="home" href="{{ url_for('home') }}">Home</a>
+        <a class="login" href="{{ url_for('register') }}">register</a>
+    </div>
+    <div class="label">
+        <div class="hero-text">
+            <h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+            <h2 class="def">Wel<span class="span">come b</span>ac<span class="span">k</span></h2>
+        </div>
+    </div>
+    <div class="box-container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>  
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+        <form 
+            style="
+                padding: 20px auto;
+                min-width: 350px;
+                max-width: 600px;
+                "
+            class="login-form"
+            method="POST" 
+            action="{{ url_for('login') }}">
+	        {{ form.csrf_token }}
+	        {{ form.email.label }} {{ form.email(size=8) }}
+	        {{ form.password.label }} {{ form.password(size=8) }}
+            {{ form.submit }}
+            <div class="forgotten-password">
+                <a style="
+                    height: auto;
+                    margin-top: 10px; 
+                    border-radius: 10px;
+                    color: blue;" 
+                id="forgotten" 
+                href="#">
+                Forgotten Password?
+                </a>
+                <a style="height: auto; margin-top: 10px; border-radius: 10px;" id="register" href="{{ url_for('register') }}">Register</a>
+            </div>
+        </form>
+        <a style="
+                height: auto; 
+                margin-top: 10px; 
+                border-radius: 10px;
+                background-color: transparent;
+                display: block;
+                margin: 0 auto;
+                width: 60px;" 
+            href="{{ url_for('google.login') }}" 
+            class="google-btn">
+            Continue with Google
+        </a>
+
+    </div>
+  <script src="script.js"></script>
+</body>
+</html>
+
+           
+                                                                                                                                                     

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="static/styles.css">
+ 
+</head>
+<body>
+    <div class="register">
+    {% if not logged_in %}
+    	<a class="login" href="{{ url_for('login') }}">login</a>
+    	<a class="login" href="{{ url_for('register') }}">register</a>
+    {% else %}
+    {% if current_user.id == 1 %}
+    {% if data %}
+    	<a class="login" href="{{ url_for('referral') }}">Active referrals</a>
+    	<a class="login" href="{{ url_for('get_accounts') }}">{{ data|length }} Accounts</a>
+    {% endif %}
+    	<a class="login" href="{{ url_for('get_user') }}">{{ tech|length }} Tech</a>
+    	<a class="login" href="{{ url_for('get_post') }}">{{ post|length }} Post</a>
+    
+    {% endif %}
+    	<a class="login" href="{{ url_for('logout') }}">logout</a>
+    {% endif %}
+  	</div>
+ 	<div class="label">
+    	<div class="hero-text">
+      		<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+      		<h2 class="def">inst<span class="span">antly b</span>ook your rep<span class="span">airs</span></h2>
+    	</div>
+  	</div>
+   
+  	<div class="bottom-nav">
+    	<div>
+  			<a href="{{ url_for('home') }}"
+     			class="{% if active_page == 'home' %}active{% endif %}">
+     			🏠
+  			</a>
+  {% if not logged_in %}
+  			<a href="{{ url_for('login') }}">
+    			 ➕
+  			</a>
+  {% else %}
+  			<a href="{{ url_for('add_product') }}"
+    			 class="{% if active_page == 'add_product' %}active{% endif %}">
+     			➕
+  			</a>
+  {% endif %}
+
+  			<a href="{{ url_for('profile_page') }}"
+     			class="{% if active_page == 'profile' %}active{% endif %}">
+     			👤
+  			</a>
+  		</div>
+	</div>
+
+  	<nav class="navbar">
+    	<a class="nav" href="{{ url_for('home') }}">
+      		🏠
+    	</a>
+    	<a class="nav" href="{{ url_for('s_l') }}">Sales/Lease</a>
+    	<a class="nav" href='{{ url_for("view_tech") }}'>Engineers</a>
+  	</nav>
+  	<div style="height: 40%;" class="slider">
+   		<div class="slides" id="slideContainer">
+  			<div id="advert">
+    			<p>Are you a Technician?</p>
+    			<p>Available for jobs?</p>
+    {% if not logged_in %}
+    			<a href="{{ url_for('login') }}">Click now to create your profile</a>
+    {% else %}
+    			<a href="{{ url_for('create_tech') }}">Click now to create your profile</a>
+    {% endif %}
+  			</div>
+  
+   
+  			<div style="
+				background: url('static/adverts.jpg'); 
+				background-size: cover;
+  				background-position: center;" id="advert">
+    			<p style="color: white; font-weight: normal;">Are you a business personel?</p>
+    			<p style="color: white; font-weight: normal;">Advertise now on CeeFind...</p>
+    		{% if not logged_in %}
+    			<a href="{{ url_for('login') }}">Click to advertise your product</a>
+    		{% else %}
+    			<a style="color: yello" href="{{ url_for('add_product') }}">Click to advertise your product</a>
+    		{% endif %}
+  			</div>
+  		</div>
+  	</div>
+  {% for post in posts %}
+  	<div class="random">
+    	<div>
+      		<img src="{{ post.img }}">
+     		 <h3>Product: {{ post.name }}</h3>
+      		<h3>Price: {{ post.price }}</h3>
+      		<a href="#">view</a>
+    	</div>
+  	</div>
+  {% endfor %}
+  	<div class="bottom-block">
+  	</div>
+  <script>
+    let index = 0;
+  const slides = document.getElementById("slideContainer");
+  const slider = document.querySelector(".slider");
+  const totalSlides = slides.children.length;
+
+  function showSlide() {
+    const slideWidth = slider.clientWidth;
+    slides.style.transform = `translateX(${-index * slideWidth}px)`;
+  }
+
+  function nextSlide() {
+    index = (index + 1) % totalSlides;
+    showSlide();
+  }
+
+  function prevSlide() {
+    index = (index - 1 + totalSlides) % totalSlides;
+    showSlide();
+  }
+
+  setInterval(nextSlide, 4000);
+
+  let startX = 0;
+  let endX = 0;
+
+  slides.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+  });
+
+  slides.addEventListener('touchmove', function(e) {
+    endX = e.touches[0].clientX;
+  });
+
+  slides.addEventListener('touchend', function() {
+    let diff = startX - endX;
+
+    if (diff > 50) {
+      nextSlide();
+    } else if (diff < -50) {
+      prevSlide();
+    }
+  });
+
+  window.addEventListener("resize", showSlide);
+ 
+  </script>
+</body>
+</html>
+

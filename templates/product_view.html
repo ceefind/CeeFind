@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CeeFind</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+</head>
+<body>
+	<div class="bottom-nav">
+		<div>
+	        <a href="{{ url_for('home') }}"
+		        class="{% if active_page == 'home' %}active{% endif %}">
+		        🏠
+	        </a>
+	{% if not logged_in %}
+	        <a href="{{ url_for('login') }}">
+		        ➕
+	        </a>
+	{% else %}
+	        <a href="{{ url_for('add_product') }}"
+		         class="{% if active_page == 'add_product' %}active{% endif %}">
+		        ➕
+	        </a>
+	{% endif %}
+
+	        <a href="{{ url_for('profile_page') }}"
+		         class="{% if active_page == 'profile' %}active{% endif %}">
+		        👤
+	        </a>
+	    </div>
+    </div>
+
+	<div class="slider">
+		<div class="slides" id="slideContainer">
+			{% for img in gallery %}
+			<img src="{{ url_for('uploaded_file', filename=img) }}"/>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="product-view">
+	<hr>
+	    <div>
+	        <h1>{{ product.name }}</h1>
+	        <p><span>Price :</span> {{ product.price }}</p>
+	        <p><span>Location :</span> {{ product.state }} State</p>
+	        <p><span>Is Negotiable :</span> {{ product.negotiable }}</p>
+	        <p><span>Email :</span> {{ product.author.email }}</p>
+	        <p><span>Seller :</span> <a href="tel:+234{{ product.contact[1:] }}" class="call-btn">
+	            📞 Call Seller
+	        </a>  <a href="https://wa.me/234{{ product.contact[1:] }}?text=Hi%20I%27m%20interested%20in%20your%20property" 
+	            target="_blank" class="whatsapp-btn">
+	            💬 Chat Seller
+	        </a></p>
+	    </div>
+	</div>
+<hr>
+	<div class="profile-page">
+	<h2 style="font-size: 20px; margin-top: 10px;" class="reviews">Reviews</h2>
+	
+	{% for review in reviews %}
+	<div class="review-container">
+	    <h3 style="
+				font-size: 17px;" 
+                class="review-name">
+	    	<img src="{{ gravatar(review.commenter_name.email) }}"/>
+	    	{{ review.commenter_name.firstname }}
+	    </h3>
+	    <p class="review-text">{{ review.text }}</p>
+	</div>
+	{% endfor %}
+	
+	<form style="
+        width: 70%;
+	    padding: 10px 5px;
+	    text-align: center;
+	    border-radius: 10px;"  
+        class="review-form" 
+        method="post" 
+        action="{{ url_for('product_view', id=product.id) }}">
+
+		{{ form.csrf_token }}
+		{{ form.review.label }} {{ form.review }}
+		{{ form.submit }}
+
+	</form>
+	</div>
+	{% if current_user.id != product.author.id %}
+	<div id="menuList">
+		<a 
+		style="background-color: azure;"
+            class="li" 
+            href="{{ url_for('reported_post', id=product.id) }}">
+            report
+        </a>
+		<a class="li" href"#">block</a>
+	</div>
+	{% else %}
+	<div class="report-this">
+	    <a style="
+            background-color: red; 
+	        color: white; 
+	        display: block; 
+	        margin: auto; 
+	        width: 50%;
+	        border-radius: 30px;
+	        text-align: center;
+	        font-size: 18px;
+	        margin-top: 20px;
+	        margin-bottom: 10px;" href="#">
+            delete post
+        </a>
+	</div>
+	{% endif %}
+	<div class="bottom-block">
+	</div>
+<script>
+	
+	let index = 0;
+	const slides = document.getElementById("slideContainer");
+	const slider = document.querySelector(".slider");
+	const totalSlides = slides.children.length;
+
+	function showSlide() {
+		const slideWidth = slider.clientWidth;
+		slides.style.transform = `translateX(${-index * slideWidth}px)`;
+	}
+
+	function nextSlide() {
+		index = (index + 1) % totalSlides;
+		showSlide();
+	}
+
+	function prevSlide() {
+		index = (index - 1 + totalSlides) % totalSlides;
+		showSlide();
+	}
+
+	setInterval(nextSlide, 3000);
+
+	let startX = 0;
+	let endX = 0;
+
+	slides.addEventListener('touchstart', function(e) {
+		startX = e.touches[0].clientX;
+	});
+
+	slides.addEventListener('touchmove', function(e) {
+		endX = e.touches[0].clientX;
+	});
+
+	slides.addEventListener('touchend', function() {
+		let diff = startX - endX;
+
+		if (diff > 50) {
+			nextSlide();
+		} else if (diff < -50) {
+			prevSlide();
+		}
+	});
+
+	window.addEventListener("resize", showSlide);
+	
+	/*const button = document.getElementById("menuItem");
+	const menu = document.getElementById("menuList");
+	button.addEventListener('click', () => {
+		menu.style.display = menu.style.display === 'none' ? "block" : "none"
+})*/
+
+</script>
+</body>
+</html>
+
+
+
+																																																																															 

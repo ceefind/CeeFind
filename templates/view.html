@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CeeFind</title>
+	<link rel="stylesheet" href="static/styles.css"/>
+</head>
+<body style="
+		background: black;
+		display: flex;
+		height: 100vh;
+		width: 100vw;
+		margin: 0;">
+	<img style="
+		display: block; 
+		min-height: 40%;
+		max-height: 80%; 
+		min-width: 40%;
+		max-width: auto;
+		margin: auto;" 
+	src="{{ url_for('uploaded_file', filename=name) }}">
+
+</body>
+</html>

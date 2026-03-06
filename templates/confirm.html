@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>CeeFind</title>
+  <link rel="stylesheet" href="static/styles.css">
+ 
+</head>
+<body>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div id="modalOverlay" class="modal-overlay">
+      <div class="modal-box">
+        {% for message in messages %}
+          <h2>{{ message }}</h2>
+        {% endfor %}
+        <a href="{{ url_for('home') }}">OK</a>
+      </div>
+    </div>
+  {% endif %}
+{% endwith %}
+
+<script>
+function closeModal() {
+  document.getElementById("modalOverlay").style.display = "none";
+}
+</script>
+</body>
+</html>
+

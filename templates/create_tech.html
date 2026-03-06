@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>career</title>
+	<link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+	<div class="register">
+		<a class="login" href="{{ url_for('home') }}">Home</a>
+	</div>
+	<div class="bottom-nav">
+		 <div>
+			 <a href="{{ url_for('home') }}">🏠</a>
+			 <a href="{{ url_for('add_product') }}">➕</a>
+			 <a href="{{ url_for('profile_page') }}">👤</a>
+		</div>
+	</div>
+	<div class="label">
+		<div class="hero-text">
+			<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+			<h2 class="def">crea<span class="span">te y</span>our career <span class="span">profile</span></h2>
+		</div>
+	</div>
+	<div class="box-container">
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			{% for message in messages %}
+				<p>{{ message }}</p>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+ <form method="POST" action="{{ url_for('create_tech') }}" enctype="multipart/form-data">
+	{{ form.hidden_tag() }}
+
+	{{ form.shop_name.label }}{{ form.shop_name }}
+	{{ form.career.label }} {{ form.career }}
+	{{ form.state.label }} {{ form.state }}
+	<label>location</label>
+	<button style="margin-bottom: 10px; margin-top: 0; height: auto; padding: 4px; font-size: 15px;" type="button" onclick="getLocation()">Use My Location</button>
+	{{ form.contact.label }} {{ form.contact }}
+	{{ form.working_hours.label }} {{ form.working_hours }}
+	{{ form.image.label }} {{ form.image }}
+	{{ form.latitude(id="latitude") }}
+	{{ form.longitude(id="longitude") }}
+
+	{{ form.submit }}
+</form>
+	</div>
+
+<script>
+	function getLocation() {
+	if ("geolocation" in navigator) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			document.getElementById("latitude").value = position.coords.latitude;
+			document.getElementById("longitude").value = position.coords.longitude;
+		});
+	} else {
+		alert("Geolocation not supported.");
+	}
+}
+</script>
+</body>
+</html>
+

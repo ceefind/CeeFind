@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="static/styles.css">
+ 
+</head>
+<body>
+    <div class="register">
+    {% if current_user.id == 1 %}
+    {% if data %}
+    	<a class="login" href="{{ url_for('home') }}">Home</a>
+    	<a class="login" href="{{ url_for('get_accounts') }}">{{ data|length }} Accounts</a>
+    {% endif %}
+    	<a class="login" href="{{ url_for('get_user') }}">{{ tech|length }} Tech</a>
+    
+    {% endif %}
+    	<a class="login" href="{{ url_for('logout') }}">logout</a>
+    </div>
+    <div class="label">
+    	<div class="hero-text">
+      		<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+      		<h2 class="def">Refer<span class="span">rals ta</span>b<span class="span">le</span></h2>
+     	</div>
+    </div>
+    <div class="bottom-nav">
+    	<div>
+  			<a href="{{ url_for('home') }}"
+    			class="{% if active_page == 'home' %}active{% endif %}">
+     			🏠
+  			</a>
+
+  			<a href="{{ url_for('add_product') }}"
+    	 		class="{% if active_page == 'add' %}active{% endif %}">
+     			➕
+  			</a>
+
+  			<a href="{{ url_for('profile_page') }}"
+     			class="{% if active_page == 'profile' %}active{% endif %}">
+    			👤
+  			</a>
+  		</div>
+	</div>
+    <table>
+  		<thead>
+    		<tr>
+      			<th>None</th>
+      			<th>Social media</th>
+      			<th>Friend</th>
+      			<th>Advert</th>
+      			<th>Agent</th>
+    		</tr>
+  		</thead>
+    	<tbody>
+
+    		<tr>
+    		    <td>{{ name|length }}</td>
+    		    <td>{{ media|length }}</td>
+    		    <td>{{ friend|length }}</td>
+    		    <td>{{ advert|length }}</td>
+    		    <td>{{ agent|length }}</td>
+    		</tr>
+    
+  		</tbody>
+	</table>
+
+    <h2 style="font-size: 16px; margin-left: 10px;">Names of users without referrals:
+    	<ul>
+  {% for names in name %}
+  			<li style="font-size: 16px; color: red;">{{ names }}</li>
+  {% endfor %}
+		</ul>
+
+    <h2 style="font-size: 16px; margin-left: 10px;">Names of users referred from social media:
+    	<ul>
+  {% for names in media %}
+  			<li style="font-size: 16px; color: blue;">{{ names }}</li>
+  {% endfor %}
+		</ul>
+  	<h2 style="font-size: 16px; margin-left: 10px;">Names of users referred by a friend:
+		<ul>
+  {% for names in friend %}
+  			<li style="font-size: 16px;">{{ names }}</li>
+  {% endfor %}
+		</ul>
+
+	<h2 style="font-size: 16px; margin-left: 10px;">Names of users referred from advert:
+		<ul>
+  {% for names in advert %}
+  			<li style="font-size: 16px; color: green;">{{ names }}</li>
+  {% endfor %}
+		</ul>
+
+	<h2 style="font-size: 16px; margin-left: 10px;">Names of users referred by an agent:
+		<ul>
+  {% for names in agent %}
+  			<li style="font-size: 16px; color: purple;">{{ names }}</li>
+  {% endfor %}
+		</ul>
+</body>
+</html>
+

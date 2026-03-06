@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CeeFind</title>
+    <link rel="stylesheet" href="static/styles.css">
+ 
+</head>
+<body>
+    <div 
+    style="
+        display: block;
+        width: 80%;
+        margin: auto;">
+        <h2
+            style="
+                display: block;
+                width: 100%;
+                margin: auto;">
+            {{ post.id }}
+        </h2>
+        <img
+            style="
+                display: block;
+                max-width: 50%;
+                margin: auto;
+                max-height: 20%;" 
+            src="{{ url_for('uploaded_file', filename=post.image) }}"/>
+    </div>
+</body>
+</html>

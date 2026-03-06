@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>CeeFind</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+	<div class="bottom-nav">
+		<div>
+			<a href="{{ url_for('home') }}"
+		 		class="{% if active_page == 'home' %}active{% endif %}">
+		 		🏠
+			</a>
+
+			<a href="{{ url_for('add_product') }}"
+		 		class="{% if active_page == 'add' %}active{% endif %}">
+		 		➕
+			</a>
+
+			<a href="{{ url_for('profile_page') }}"
+		 		class="{% if active_page == 'profile' %}active{% endif %}">
+		 		👤
+			</a>
+		</div>
+	</div>
+	{% if data %}
+	<div class="profile-page">
+		<div class="image-container">
+			<a href="{{ url_for('view', name=data.image) }}">
+				<img src="{{ url_for('uploaded_file', filename=data.image) }}" alt="{{ data.shop_name }} profile picture"/>
+			</a>
+		</div>
+		<h2 class="shop-name-box">{{ data.shop_name }}</h2>
+		<hr style="margin-bottom: 2px;">
+		<div style="margin-top: 0;">
+			<div style="
+				display: flex;
+				width: 100%;
+				text-align: center;
+				margin-top: 0;">
+				<p style="
+					display: flex;
+					width: 80%;
+					margin-top: 0;
+					margin-left: 30px;
+					text-align: left;"><strong>Bio:</strong> {{ data.bio }}</p> 
+				{% if current_user.id == data.user_id %}
+				<a style="
+					width: 20%;
+					font-size: 18px;" 
+					href="{{ url_for('bio_edit', shopname=data.shop_name) }}">edit</a>
+				{% endif %}
+			</div>
+			<p><strong>Address:</strong> {{ data.address }}</p>
+			<p><strong>Contact:</strong> {{ data.contact }}</p>
+			<p><strong>Email:</strong> {{ data.email }}</p>
+		</div>
+		<hr>
+	
+<h2 class="reviews">Reviews</h2>
+
+{% for review in post %}
+	<div style="background-color: transparent;"
+			class="review-container">
+		<h3 style="
+				font-size: 17px;
+				margin-top: 0;" class="review-name">
+			<img src="{{ gravatar(review.commenter_name.email) }}"/>
+			{{ review.commenter_name.firstname }}
+		</h3>
+		<p class="review-text">{{ review.text }}</p>
+	</div>
+{% endfor %}
+
+<form style="
+	width: 70%;
+	padding: 10px 5px;
+	text-align: center;
+	border-radius: 10px;" 
+	class="review-form" 
+	method="post" 
+	action="{{ url_for('profile_view', name=data.shop_name) }}">
+	{{ form.csrf_token }}
+	{{ form.review.label }} {{ form.review }}
+	{{ form.submit }}
+</form>
+	</div>
+	{% endif %}
+	<div class="bottom-block">
+	</div>
+</body>
+</html>
+
+																																																																																															 

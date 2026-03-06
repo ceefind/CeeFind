@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CeeFind</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+	<div class="bottom-nav">
+    	<div>
+  			<a href="{{ url_for('home') }}"
+     			class="{% if active_page == 'home' %}active{% endif %}">
+     			🏠
+  			</a>
+
+  			<a href="{{ url_for('add_product') }}"
+     			class="{% if active_page == 'add' %}active{% endif %}">
+     			➕
+  			</a>
+
+  			<a href="{{ url_for('profile_page') }}"
+    	 		class="{% if active_page == 'profile' %}active{% endif %}">
+     			👤
+  			</a>
+  		</div>
+	</div>
+  
+    <div class="register">
+    {% if current_user.id == 1 %}
+    	<a class="login" href="{{ url_for('home') }}">Home</a>
+    	<a class="login" href="{{ url_for('referral') }}">Active referrals</a>
+    	<a class="login" href="{{ url_for('get_user') }}">{{ tech|length }} Tech</a>
+    	<a class="login" href="{{ url_for('get_post') }}">{{ post|length }} Post</a>
+
+    	<a class="login" href="{{ url_for('logout') }}">logout</a>
+    {% endif %}
+  	</div>
+    <div class="label">
+    	<div class="hero-text">
+      		<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+      		<h2 class="def">user<span class="span"> l</span>i<span class="span">st</span></h2>
+    	</div>
+    </div>
+    <div class="random">
+  {% for user in data %}
+  		<div class="items">
+  			<h3 class="p-details"> {{ user.id }}</h3>
+  			<h3 class="p-details">First Name: {{ user.firstname }}</h3>
+  			<h3 class="p-details">Last Name: {{ user.lastname }}</h3>
+  			<h3 class="p-details">Email Adress: {{ user.email }}</h3>
+  {% if not user.id == 1 %}
+  			<a style="height: auto;" 
+  				href="{{ url_for('delete_user', email=user.email) }}" 
+ 				class="delete-button">
+  				Delete
+			</a>
+  {% else %}
+  			<a href="#">Admin</a>
+  {% endif %}
+  		</div>
+  {% endfor %}
+    </div>
+    <div class="bottom-block">
+    </div>
+</body>
+</html>
+
+
+

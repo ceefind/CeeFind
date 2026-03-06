@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CeeFind</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <div class="bottom-nav">
+    	<div>
+    		<a href="{{ url_for('home') }}"
+            	class="{% if active_page == 'home' %}active{% endif %}">
+     			🏠
+    		</a>
+
+    		<a href="{{ url_for('add_product') }}"
+       			class="{% if active_page == 'add' %}active{% endif %}">
+     			➕
+    	 	</a>
+
+  			<a href="{{ url_for('profile_page') }}"
+     			class="{% if active_page == 'profile' %}active{% endif %}">
+     			👤
+  			</a>
+  		</div>
+	</div>
+  
+    <div class="register">
+    	{% if current_user.id == 1 %}
+    		<a class="login" href="{{ url_for('home') }}">Home</a>
+    	{% if data %}
+    		<a class="login" href="{{ url_for('referral') }}">Active referrals</a>
+    		<a class="login" href="{{ url_for('get_accounts') }}">{{ data|length }} Accounts</a>
+    		<a class="login" href="{{ url_for('get_post') }}">{{ post|length }} Post</a>
+
+    	{% endif %}
+    		<a class="login" href="{{ url_for('logout') }}">logout</a>
+    	{% endif %}
+    
+    </div>
+    <div class="label">
+    	<div class="hero-text">
+      		<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+      		<h2 class="def">Techni<span class="span">cian l</span>i<span class="span">st</span></h2>
+    	</div>
+    </div>
+    <div style="
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		gap: 20px;">
+		{% for t in tech %}
+  
+    	<div style="
+  			width: 60%;
+  			height: 100%; padding: 0;" 
+			class="items">
+  			<div class="p-img-box">
+				{% if t.image %}
+    			<img class="p-img" src="{{ url_for('uploaded_file', filename=t.image) }}"/>
+				{% endif %}
+  			</div>
+  			<h3 class="p-details">Shop Name: {{ t.shop_name }}</h3>
+  			<h3 class="p-details">ID: {{ t.id }}</h3>
+  			<h3 class="p-details">Email Adress: {{ t.email }}</h3>
+  			{% if tech.is_suspended %}
+  				<span class="badge bg-danger">Suspended</span>
+  			{% endif %}
+  			<a style="
+				height: auto; 
+  				margin-top: 3px;
+  				margin-bottom: 3px;" 
+				href="{{ url_for('delete', name=t.shop_name) }}" 
+				class="delete-button">
+				Delete
+			</a>
+    	</div>
+  		{% endfor %}
+    </div>
+    <div class="bottom-block">
+    </div>
+</body>
+</html>
+
+

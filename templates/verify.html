@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CeeFind</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+	<div class="register">
+		<a class="login" href="{{ url_for('home') }}">Home</a>
+	</div>
+	<div class="label">
+		<div>
+			<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+			<p class="def">ver<span class="span">ify</span> your emai<span class="span">l</span></p>
+		</div>
+	</div>
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			{% for message in messages %}
+				<h2>{{ message }}</h2>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+	<form method="post" action="{{ url_for('verify', email=user.email) }}">
+		{{ form.csrf_token }}
+		{{ form.code.label }} {{ form.code() }}
+		{{ form.submit }}
+		<div class="forgotten-password">
+				<a style="color: blue;
+				display: block;
+				margin: 0 auto;
+				min-width: 60%;
+				text-align: center;" id="forgotten" href="#">Resend Verification Code</a>                              
+				
+		</div>
+	 </form>
+</body>
+</html>

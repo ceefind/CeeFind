@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>CeeFind</title>
+	<link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+	<div class="bottom-nav">
+		<div>
+			<a href="{{ url_for('home') }}"
+		 		class="{% if active_page == 'home' %}active{% endif %}">
+		 		🏠
+			</a>
+
+			<a href="{{ url_for('add_product') }}"
+		 		class="{% if active_page == 'add' %}active{% endif %}">
+		 		➕
+			</a>
+
+			<a href="{{ url_for('profile_page') }}"
+		 		class="{% if active_page == 'profile_page' %}active{% endif %}">
+		 		👤
+			</a>
+		</div>
+	</div>
+	
+	<div class="register">
+		{% if not logged_in %}
+		<a class="login" href="{{ url_for('login') }}">login</a>
+		<a class="login" href="{{ url_for('register') }}">register</a>
+		{% else %}
+		<a class="login" href="{{ url_for('home') }}">Home</a>
+		<a class="login" href="{{ url_for('logout') }}">Logout</a>
+		{% endif %}
+	</div>
+	<div 
+		style="
+			height: 100vh;
+			background: azure;
+			text-align: center;
+			padding-top: 5px;
+			">
+	{% if not profile.image %}
+		<img style="
+			min-width: 15%;
+			max-width: 40%;
+			display: block;
+			margin: auto;
+			border-radius: 50%;
+			min-height: 15%;
+			max-height: 50%;
+			border: 2px dashed green;
+			margin-top: 20px;" 
+		src="static/tools.jpg"/>
+	{% else %}
+		<img style="
+			max-width: 40%;
+			display: block;
+			margin: auto;
+			border-radius: 50%;
+			min-height: 15%;
+			max-height: 40%;
+			border: 2px dashed green;
+			margin-top: 5px;" 
+		src="{{ url_for('uploaded_file', filename=profile.image) }}"/>
+	{% endif %}
+		 
+		<h1 style="
+			text-align: center;
+			font-size: 18px;
+			font-weight: bold;
+			margin-top: 10px;
+			">
+			{{ profile.firstname}} {{ profile.lastname }}
+		</h1>
+		<p style="
+			display: block;
+			width: 30%;
+			text-align: center;
+			font-size: 12px;
+			font-weight: normal;
+			margin: 5px auto 20px;
+			">
+			{{ profile.email }}
+		</p>
+		{% if not profile.is_verified %}
+		<a 
+			style="
+				background-color: green;
+				font-size: 15px;
+				font-weight: bold;
+				border-radius: 10px;
+				color: wheat;
+				padding: 3px;" 
+			href="{{ url_for('verify', email=profile.email) }}">
+			verify your email
+		</a>
+		{% endif %}
+		{% for p in post %}
+		{% if p.is_suspended %}
+			<P 
+				style="
+					display: block;
+					width: 60%;
+					margin: auto;
+					font-size: 13px;
+					color: red;">
+				Your post {{ p.name }} is suspended and can't be seen in the market place, if you think this was a mistake, you can send an appeal
+			</P>
+			<a
+				style="
+					display: block;
+					background-color: green;
+					color: white;
+					padding: 2px;
+					border-radius: 8px;
+					width: 80px;
+					margin: 4px auto;
+					font-weight: bold;"
+				href="{{ url_for('appeal', id=p.id) }}">
+				Appeal
+			</a>
+		{% endif %}
+		{% endfor %}
+		
+<hr>
+	 
+		<div 
+			style="
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				width: 100%; 
+				gap: 10px; 
+				padding: 5px;
+				margin-top: 10px;">
+			{% for img in gallery %}
+		
+			<div style="margin-top: 10px;">
+				<a href="{{ url_for('view', name=img) }}">
+					<img style="width: 100%;" src="{{ url_for('uploaded_file', filename=img ) }}"/>
+				</a>
+			</div>
+		
+		{% endfor %}
+		</div>
+	 
+	</div>
+	
+</body>
+</html>
