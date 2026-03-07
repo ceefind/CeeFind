@@ -89,6 +89,68 @@
 </form>
 	</div>
 	{% endif %}
+	{% if not data.is_suspended %}
+	{% if current_user.id != data.user_id %}
+	<div
+		style="
+			display: flex;
+			width: 60%;
+			text-align: center;
+			justify-content: center;
+			margin: auto;"
+		id="menuList">
+		<a 
+			style="
+				display: block;
+				color: red;
+				border: 1px solid red;
+				border-radius: 30px;
+				width: 50%;
+				height: auto;
+				margin: 0 auto;
+				font-size: 25px;"
+            class="li" 
+            href="{{ url_for('reported_tech', id=data.id) }}">
+            report
+        </a>
+		<a 
+			style="
+				display: bloick;
+				color: red;
+				border:1px solid red;
+				border-radius: 30px;
+				width: 50%;
+				height: auto;
+				margin: 0 auto;
+				font-size: 25px;"
+			class="li" href"#">block</a>
+	</div>
+	{% endif %}
+	{% else %}
+	<div
+		style="
+			display: flex;
+			width: 60%;
+			text-align: center;
+			justify-content: center;
+			margin: auto;"
+		id="menuList">
+		<a style="
+            background-color: red; 
+	        color: white; 
+	        display: block; 
+	        margin: auto; 
+	        width: 50%;
+	        border-radius: 30px;
+	        text-align: center;
+	        font-size: 18px;
+	        margin-top: 20px;
+	        margin-bottom: 10px;" 
+			href="#">
+			Delete profile
+		</a>
+	</div>
+	{% endif %}
 	<div class="bottom-block">
 	</div>
 </body>

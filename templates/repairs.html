@@ -65,6 +65,13 @@
 			onclick="findNearby()">
 			Find Nearby Technicians
 	</button>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <p style="color:red">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 	<div style="
 			display: grid;
 			gap: 30px;

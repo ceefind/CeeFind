@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -85,14 +85,39 @@
 	</form>
 	</div>
 	{% if current_user.id != product.author.id %}
-	<div id="menuList">
+	<div
+		style="
+			display: flex;
+			width: 60%;
+			text-align: center;
+			justify-content: center;
+			margin: auto;"
+		id="menuList">
 		<a 
-		style="background-color: azure;"
+			style="
+				display: block;
+				color: red;
+				border: 1px solid red;
+				border-radius: 30px;
+				width: 50%;
+				height: auto;
+				margin: 0 auto;
+				font-size: 25px;"
             class="li" 
             href="{{ url_for('reported_post', id=product.id) }}">
             report
         </a>
-		<a class="li" href"#">block</a>
+		<a 
+			style="
+				display: bloick;
+				color: red;
+				border:1px solid red;
+				border-radius: 30px;
+				width: 50%;
+				height: auto;
+				margin: 0 auto;
+				font-size: 25px;"
+			class="li" href"#">block</a>
 	</div>
 	{% else %}
 	<div class="report-this">
