@@ -35,6 +35,23 @@
 		<a class="login" href="{{ url_for('logout') }}">Logout</a>
 		{% endif %}
 	</div>
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+	{% for message in messages %}
+		<p class="flash-message" style="
+				color: green;
+				width: 100%;
+				margin: 10px auto;
+				padding: auto;
+				text-align: center;
+				display: block;
+				font-size: 18px;
+				background-color: gainsboro;">
+			{{ message }}
+		</p>
+	{% endfor %}
+	{% endif %}
+	{% endwith %}
 	<div 
 		style="
 			height: 100vh;
@@ -83,7 +100,14 @@
 			font-weight: normal;
 			margin: 5px auto 20px;
 			">
-			{{ profile.email }}
+			{{ profile.email }} 
+			<a 
+			style="
+				display: block;
+				width: 100%;
+				margin: auto;" 
+			href="{{ url_for('email_edit', email=profile.email) }}">
+			edit email</a>
 		</p>
 		{% if not profile.is_verified %}
 		<a 
@@ -94,7 +118,7 @@
 				border-radius: 10px;
 				color: wheat;
 				padding: 3px;" 
-			href="{{ url_for('verify', email=profile.email) }}">
+			href="{{ url_for('send_verification_email', email=current_user.email) }}">
 			verify your email
 		</a>
 		{% endif %}

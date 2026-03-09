@@ -3,22 +3,76 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>CeeFind</title>
     <link rel="stylesheet" href="static/styles.css">
  
 </head>
 <body>
     <div class="register">
+		<div 
+		style="
+			display: flex;
+			width: 80%;
+			padding: 5px;
+			justify-content: center;
+			align-items: center;">
     {% if current_user.id == 1 %}
-    {% if data %}
-    	<a class="login" href="{{ url_for('home') }}">Home</a>
-    	<a class="login" href="{{ url_for('get_accounts') }}">{{ data|length }} Accounts</a>
+    	<a 
+			class="login" 
+			href="{{ url_for('get_accounts') }}">
+			<span 
+				class="num-count">
+				{{ data|length }}
+			</span> Accounts
+		</a>
+    	<a 
+			class="login" 
+			href="{{ url_for('get_post') }}">
+			<span 
+				class="num-count">
+				{{ post|length }}
+			</span> suspended Post
+		</a>
+		<a 
+			class="login" 
+			href="{{ url_for('suspended_tech') }}">
+			<span 
+				class="num-count">
+				{{ suspended_tech|length }}
+			</span> suspended tech
+		</a>
+    	<a 
+			class="login" 
+			href="{{ url_for('get_user') }}">
+			<span 
+				class="num-count">
+				{{ tech|length }}
+			</span> Tech
+		</a>
     {% endif %}
-    	<a class="login" href="{{ url_for('get_user') }}">{{ tech|length }} Tech</a>
-    
+		</div>
+		<div 
+		style="
+			display: flex;
+			flex-direction: row-reverse;
+			width: 20%;
+			padding: 5px;">
+    {% if not logged_in %}
+    	<a class="login" href="{{ url_for('login') }}">login</a>
+    	<a class="login" href="{{ url_for('register') }}">register</a>
+    {% else %}
+    	<a 
+			style="width: auto;"
+			class="login" href="{{ url_for('logout') }}">logout
+		</a>
+		<a 
+			style="width: auto;"
+			class="login" href="{{ url_for('home')}}">
+			Home
+		</a>
     {% endif %}
-    	<a class="login" href="{{ url_for('logout') }}">logout</a>
-    </div>
+		</div>
+  	</div>
     <div class="label">
     	<div class="hero-text">
       		<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>

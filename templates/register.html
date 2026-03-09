@@ -1,56 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-    <link rel="stylesheet" href="static/styles.css">
+		<meta charset="UTF-8">
+		<title>Home</title>
+		<link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
-    <div class="register">
-        <a class="home" href="{{ url_for('home') }}">Home</a>
-        <a class="login" href="{{ url_for('login') }}">login</a>
-    </div>
-    <div class="label">
-      <div class="hero-text">
-        <h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
-        <h2 class="def">Re<span class="span">gister</span> to cont<span class="span">inue</span></h2>
-      </div>
-    </div>
-    <div class="box-container">
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-         <p class="message">{{ message }}</p>  
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-    <form action="{{ url_for('register') }}" method="post" novalidate enctype="multipart/form-data">
-        {{ form.csrf_token }}
-        {{ form.first_name.label }} {{ form.first_name() }}
-        {% for err in form.first_name.errors %} <span style="color:red">{{ err }}</span> {% endfor %}
-        {{ form.last_name.label }} {{ form.last_name() }}
-        {% for err in form.last_name.errors %} <span style="color:red">{{ err }}</span> {% endfor %}
-        {{ form.email.label }} {{ form.email() }}
-        {% for err in form.email.errors %} <span style="color:red">{{ err }}</span> {% endfor %}
-        {{ form.image.label }} {{ form.image }}
-        {{ form.referral.label }} {{ form.referral }}
-        {{ form.password.label }} {{ form.password() }}
-        {{ form.re_password.label }} {{ form.re_password() }}
-        {{ form.submit }}
-        <div class="forgotten-password">
-            <a id="forgotten" href="#">Already have an account?</a>                              
-            <a id="register" href="{{ url_for('login') }}">Login</a>
-        </div>
-    </form>
-    <a href="{{ url_for('google.login') }}" class="google-btn">
-      Continue with Google
-    </a>
+		<div class="register">
+				<a class="home" href="{{ url_for('home') }}">Home</a>
+				<a class="login" href="{{ url_for('login') }}">login</a>
+		</div>
+		<div class="label">
+			<div class="hero-text">
+				<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+				<h2 class="def">Re<span class="span">gister</span> to cont<span class="span">inue</span></h2>
+			</div>
+		</div>
+		<div class="box-container">
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				{% for message in messages %}
+				 <p class="message">{{ message }}</p>  
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+		<form 
+			style="
+					padding: 20px auto;
+					min-width: 350px;
+					max-width: 600px;
+					"
+			class="login-form"
+			action="{{ url_for('register') }}" 
+			method="post" 
+			novalidate 
+			enctype="multipart/form-data">
+				{{ form.csrf_token }}
+				{{ form.first_name.label }} {{ form.first_name() }}
+				{% for err in form.first_name.errors %} <span style="color:red">{{ err }}</span> {% endfor %}
+				{{ form.last_name.label }} {{ form.last_name() }}
+				{% for err in form.last_name.errors %} <span style="color:red">{{ err }}</span> {% endfor %}
+				{{ form.email.label }} {{ form.email() }}
+				{% for err in form.email.errors %} <span style="color:red">{{ err }}</span> {% endfor %}
+				{{ form.image.label }} {{ form.image }}
+				{{ form.referral.label }} {{ form.referral }}
+				{{ form.password.label }} {{ form.password() }}
+				{{ form.re_password.label }} {{ form.re_password() }}
+				{{ form.submit }}
+				<div class="forgotten-password">
+						<a id="forgotten" href="#">Already have an account?</a>                              
+						<a id="register" href="{{ url_for('login') }}">Login</a>
+				</div>
+		</form>
+		<a href="{{ url_for('google.login') }}" class="google-btn">
+			Continue with Google
+		</a>
 
-    <div>
+		<div>
 </body>
 </html>
 
 
-           
-                                                                                                                                                     
+					 
+																																																																										 
 

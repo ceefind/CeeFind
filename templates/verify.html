@@ -23,18 +23,18 @@
 			{% endfor %}
 		{% endif %}
 	{% endwith %}
-	<form method="post" action="{{ url_for('verify', email=user.email) }}">
-		{{ form.csrf_token }}
-		{{ form.code.label }} {{ form.code() }}
-		{{ form.submit }}
-		<div class="forgotten-password">
-				<a style="color: blue;
-				display: block;
-				margin: 0 auto;
-				min-width: 60%;
-				text-align: center;" id="forgotten" href="#">Resend Verification Code</a>                              
-				
-		</div>
-	 </form>
+	<div style="display: block;
+	width: 60%;
+	margin: auto;
+	text-align: center;">
+	{% if count != 3 %}
+	<h2>Welcome to CeeFind</h2>
+	<p>We've sent a Verification link to {{ email }}</p>
+	<p>Please click the link to confirm your email</p>
+	{% else %}
+	<h2>Welcome to CeeFind</h2>
+	<p>you've reached the maximun amount of link to be sent per day, try again tomorrow.</p>
+	{% endif %}
+	</div>
 </body>
 </html>

@@ -68,7 +68,12 @@
   {% with messages = get_flashed_messages() %}
     {% if messages %}
       {% for message in messages %}
-        <p style="color:red">{{ message }}</p>
+        <p style="
+		color:red;
+		display: block;
+		margin: auto;
+		text-align: center;
+		width: 100%;">{{ message }}</p>
       {% endfor %}
     {% endif %}
   {% endwith %}
@@ -111,7 +116,16 @@
 			{% with messages = get_flashed_messages() %}
 				{% if messages %}
 					{% for message in messages %}
-						<p class="message">{{ message }}</p>
+						<p 
+							style="
+								color:red;
+								display: block;
+								margin: auto;
+								text-align: center;
+								width: 100%;"
+							class="message">
+							{{ message }}
+						</p>
 					{% endfor %}
 				{% endif %}
 			{% endwith %}
