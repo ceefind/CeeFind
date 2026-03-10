@@ -979,34 +979,7 @@ def verify(token):
         flash("No User found")
     return redirect(url_for("profile_page" ))
 
-    """user = db.session.execute(db.select(User).where(User.email == email)).scalar()
-    form = VerifyForm()
-
-    if request.method == "GET":
-        verify_code = int(''.join(choices('1234567890', k=8)))
-        session['verify_code'] = verify_code
-
-        with smtplib.SMTP('smtp.gmail.com', port=587) as connection:
-            connection.starttls()
-            connection.login(user="officialceefind@gmail.com", password="xonp pjau bvor grem")
-            connection.sendmail(from_addr="officialceefind@gmail.com", to_addrs=email, msg=f"Subject:Verification\n\nHi \
-                                {user.firstname}! \n Your verification code is \n\n {verify_code} \n\n \
-                                Do not share with anyone or input it on any platform other than the official ceefind website.")
-
-    if form.validate_on_submit():
-        code = form.code.data
-        
-        if code == session.get('verify_code'):
-            user.is_verified = True
-            db.session.commit()
-            session.pop('verify_code', None)
-            return redirect(url_for('profile_page'))
-        else:
-            flash('incorrect verification code')
-            return render_template('verify.html', user=user, form=form)
-    #print(verify_code)
-    return render_template('verify.html', user=user, form=form)"""
- 
+    
 @app.route("/view/<name>")
 def view(name):
     #name = request.args.get('name')
@@ -1030,5 +1003,5 @@ def view_tech():
 
    
 if __name__=="__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=False)
                                                                                                                                 
