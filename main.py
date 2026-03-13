@@ -803,15 +803,13 @@ def referral():
     tech = Technicians.query.all()
     post = Product.query.filter_by(is_suspended = True).all()
     suspended_tech = Technicians.query.filter_by(is_suspended = True).all()
-    count = []
+    count = [ref["email"] for ref in data in ref.referral == 'none']
     a_friend = []
     social_media = []
     advert = []
     agent =[]
     for ref in data:
-        if ref.referral == 'none':
-            count.append(ref.email)
-        elif ref.referral == 'Social media':
+        if ref.referral == 'Social media':
             social_media.append(ref.email)
         elif ref.referral == 'A Friend':
             a_friend.append(ref.email)
