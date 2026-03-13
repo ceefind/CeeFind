@@ -29,120 +29,142 @@
 	        </a>
 	    </div>
     </div>
-
-	<div class="slider">
-		<div class="slides" id="slideContainer">
-			{% for img in gallery %}
-			<img src="{{ url_for('uploaded_file', filename=img) }}"/>
-			{% endfor %}
+	<div class="profile">
+		<div class="s-slider">
+			<div class="s-slides" id="slideContainer">
+				{% for img in gallery %}
+					<!-- <div
+						class="slide-img-box"
+						style="
+						display: block;
+						height: 100%;
+						width: 450px;">
+				<a href="{{ url_for('view', name=img) }}"> -->
+					<img 
+						style="display: block;
+						height: 100%;
+						width: 100%;
+						margin: auto;"
+					src="{{ url_for('uploaded_file', filename=img) }}"/>
+				<!-- </a>
+					</div> -->
+				{% endfor %}
+			</div>
 		</div>
-	</div>
-	<div class="product-view">
-	<hr>
-	    <div>
-	        <h1>{{ product.name }}</h1>
-	        <p><span>Price :</span> {{ product.price }}</p>
-	        <p><span>Location :</span> {{ product.state }} State</p>
-	        <p><span>Is Negotiable :</span> {{ product.negotiable }}</p>
-	        <p><span>Email :</span> {{ product.author.email }}</p>
-	        <p><span>Seller :</span> <a href="tel:+234{{ product.contact[1:] }}" class="call-btn">
-	            📞 Call Seller
-	        </a>  <a href="https://wa.me/234{{ product.contact[1:] }}?text=Hi%20I%27m%20interested%20in%20your%20property" 
-	            target="_blank" class="whatsapp-btn">
-	            💬 Chat Seller
-	        </a></p>
-	    </div>
-	</div>
-<hr>
-	<div class="profile-page">
-	<h2 style="font-size: 20px; margin-top: 10px;" class="reviews">Reviews</h2>
-	
-	{% for review in reviews %}
-	<div class="review-container">
-	    <h3 style="
-				font-size: 17px;" 
-                class="review-name">
-	    	<img src="{{ gravatar(review.commenter_name.email) }}"/>
-	    	{{ review.commenter_name.firstname }}
-	    </h3>
-	    <p class="review-text">{{ review.text }}</p>
-	</div>
-	{% endfor %}
-	
-	<form style="
-        width: 70%;
-	    padding: 10px 5px;
-	    text-align: center;
-	    border-radius: 10px;"  
-        class="review-form" 
-        method="post" 
-        action="{{ url_for('product_view', id=product.id) }}">
-
-		{{ form.csrf_token }}
-		{{ form.review.label }} {{ form.review }}
-		{{ form.submit }}
-
-	</form>
-	</div>
-	{% if current_user.id != product.author.id %}
-	<div
-		style="
-			display: flex;
-			width: 60%;
-			text-align: center;
-			justify-content: center;
-			margin: auto;"
-		id="menuList">
-		<a 
+		<div class="product-view">
+		<hr>
+		    <div>
+		        <h1 style="margin-left: 10px;">{{ product.name }}</h1>
+		        <p style="margin-left: 40px;"><span>Price :</span> {{ product.price }}</p>
+		        <p style="margin-left: 40px;"><span>Location :</span> {{ product.state }} State</p>
+		        <p style="margin-left: 40px;"><span>Is Negotiable :</span> {{ product.negotiable }}</p>
+				{% if logged_in %}
+		        <p style="margin-left: 40px;"><span>Email :</span> {{ product.author.email }}</p>
+		        <p style="margin-left: 40px;"><span>Seller :</span> <a href="tel:+234{{ product.contact[1:] }}" class="call-btn">
+		            📞 Call Seller
+		        </a>  <a href="https://wa.me/234{{ product.contact[1:] }}?text=Hi%20I%27m%20interested%20in%20your%20property" 
+		            target="_blank" class="whatsapp-btn">
+		            💬 Chat Seller
+		        </a></p>
+				{% else %}
+		        <p style="margin-left: 40px;
+				color: red;"><span>contact details :</span> Log in to view contact details.</p>
+				{% endif %}
+		    </div>
+		</div>
+<hr	>
+		<div class="profile-p">
+			<h2 
+			style="font-size: 20px; margin-top: 10px;" 
+			class="reviews">Reviews</h2>
+			
+			{% for review in reviews %}
+			<div class="review-container">
+			    <h3 style="
+						font-size: 17px;" 
+    		        class="review-name">
+			    	<img src="{{ gravatar(review.commenter_name.email) }}"/>
+			    	{{ review.commenter_name.firstname }}
+			    </h3>
+			    <p class="review-text">{{ review.text }}</p>
+			</div>
+			{% endfor %}
+			
+			<form style="
+    		    width: 70%;
+			    padding: 10px 5px;
+			    text-align: center;
+			    border-radius: 10px;"  
+    		    class="login-form" 
+    		    method="post" 
+    		    action="{{ url_for('product_view', id=product.id) }}">
+			
+				{{ form.csrf_token }}
+				{{ form.review.label }} {{ form.review }}
+				{{ form.submit }}
+			
+			</form>
+		</div>
+		{% if current_user.id != product.author.id %}
+		<div
 			style="
-				display: block;
-				color: red;
-				border: 1px solid red;
-				border-radius: 30px;
-				width: 50%;
-				height: auto;
-				margin: 0 auto;
-				font-size: 25px;"
-            class="li" 
-            href="{{ url_for('reported_post', id=product.id) }}">
-            report
-        </a>
-		<a 
-			style="
-				display: bloick;
-				color: red;
-				border:1px solid red;
-				border-radius: 30px;
-				width: 50%;
-				height: auto;
-				margin: 0 auto;
-				font-size: 25px;"
-			class="li" href"#">block</a>
-	</div>
-	{% else %}
-	<div class="report-this">
-	    <a style="
-            background-color: red; 
-	        color: white; 
-	        display: block; 
-	        margin: auto; 
-	        width: 50%;
-	        border-radius: 30px;
-	        text-align: center;
-	        font-size: 18px;
-	        margin-top: 20px;
-	        margin-bottom: 10px;" href="#">
-            delete post
-        </a>
-	</div>
-	{% endif %}
-	<div class="bottom-block">
+				display: flex;
+				width: 60%;
+				text-align: center;
+				justify-content: center;
+				margin: auto;"
+			id="menuList">
+			<a 
+				style="
+					display: block;
+					color: red;
+					border: 1px solid red;
+					border-radius: 30px;
+					width: 50%;
+					height: auto;
+					margin: 0 auto;
+					font-size: 25px;"
+    	        class="li" 
+    	        href="{{ url_for('reported_post', id=product.id) }}">
+    	        report
+    	    </a>
+			<a 
+				style="
+					display: bloick;
+					color: red;
+					border:1px solid red;
+					border-radius: 30px;
+					width: 50%;
+					height: auto;
+					margin: 0 auto;
+					font-size: 25px;"
+				class="li" href"#">block</a>
+		</div>
+		{% else %}
+		<div class="report-this">
+		    <a style="
+    	        background-color: red; 
+		        color: white; 
+		        display: block; 
+		        margin: auto; 
+		        width: 50%;
+		        border-radius: 30px;
+		        text-align: center;
+		        font-size: 18px;
+		        margin-top: 20px;
+		        margin-bottom: 10px;" href="#">
+    	        delete post
+    	    </a>
+		</div>
+		{% endif %}
+		<div class="bottom-block">
+		</div>
 	</div>
 <script>
 	
 	let index = 0;
 	const slides = document.getElementById("slideContainer");
-	const slider = document.querySelector(".slider");
+	const slider = document.querySelector(".s-slider");
 	const totalSlides = slides.children.length;
 
 	function showSlide() {
@@ -184,12 +206,6 @@
 	});
 
 	window.addEventListener("resize", showSlide);
-	
-	/*const button = document.getElementById("menuItem");
-	const menu = document.getElementById("menuList");
-	button.addEventListener('click', () => {
-		menu.style.display = menu.style.display === 'none' ? "block" : "none"
-})*/
 
 </script>
 </body>

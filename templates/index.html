@@ -95,11 +95,17 @@
      			➕
   			</a>
   {% endif %}
-
-  			<a href="{{ url_for('profile_page') }}"
-     			class="{% if active_page == 'profile' %}active{% endif %}">
-     			👤
-  			</a>
+			{% if logged_in %}
+			<a href="{{ url_for('profile_page') }}"
+		 		class="{% if active_page == 'profile' %}active{% endif %}">
+		 		👤
+			</a>
+			{% else %}
+			<a href="#"
+		 		class="{% if active_page == 'profile' %}active{% endif %}">
+		 		👤
+			</a>
+			{% endif %}
   		</div>
 	</div>
 
@@ -110,8 +116,11 @@
     	<a class="nav" href="{{ url_for('s_l') }}">Sales/Lease</a>
     	<a class="nav" href='{{ url_for("view_tech") }}'>Engineers</a>
   	</nav>
-  	<div style="height: 40%;" class="slider">
-   		<div class="slides" id="slideContainer">
+  	<div 
+		class="slider">
+   		<div
+			class="slides" 
+			id="slideContainer">
   			<div id="advert">
     			<p>Are you a Technician?</p>
     			<p>Available for jobs?</p>
@@ -121,8 +130,6 @@
     			<a href="{{ url_for('create_tech') }}">Click now to create your profile</a>
     {% endif %}
   			</div>
-  
-   
   			<div style="
 				background: url('static/adverts.jpg'); 
 				background-size: cover;
@@ -137,16 +144,226 @@
   			</div>
   		</div>
   	</div>
-  {% for post in posts %}
-  	<div class="random">
-    	<div>
-      		<img src="{{ post.img }}">
-     		 <h3>Product: {{ post.name }}</h3>
-      		<h3>Price: {{ post.price }}</h3>
-      		<a href="#">view</a>
+	<div class="product-container">
+		{% if accessories %}
+  		<div
+			id="accessories" 
+			class="flex-container">
+		{% for p in accessories %}
+		<a 
+		style="color: black;"
+		href="{{ url_for('product_view', id=p.id)}}">
+		{% if p %}
+    	<div class="product-card">
+			<div class="product-img">
+      			<img src="{{ url_for('uploaded_file', filename=p.image) }}">
+			</div>
+			<div class="product-info">
+				<h3 style="
+				font-size: 12px;
+				font-weight: normal;
+				overflow: hidden;">Product: {{ p.name }}</h3>
+      			<h3 style="
+				font-size: 10px;
+				font-weight: normal;">Price: ₦ {{ p.price }}</h3>
+      			
+			</div>
     	</div>
-  	</div>
-  {% endfor %}
+		{% else %}
+		<P></P>
+		{% endif %}
+		</a>
+		{% endfor %}
+  		</div>
+		{% endif %}
+		{% if electronics %}
+  		<div
+			id="electronics" 
+			class="flex-container">
+		{% for p in electronics %}
+		<a 
+		style="color: black;"
+		href="{{ url_for('product_view', id=p.id)}}">
+		{% if p %}
+    	<div class="product-card">
+			<div class="product-img">
+      			<img src="{{ url_for('uploaded_file', filename=p.image) }}">
+			</div>
+			<div class="product-info">
+				<h3 style="
+				font-size: 10px;
+				font-weight: normal;
+				overflow: hidden;">Product: {{ p.name }}</h3>
+      			<h3 style="
+				font-size: 10px;
+				font-weight: normal;">Price: ₦ {{ p.price }}</h3>
+      			
+			</div>
+    	</div>
+		{% else %}
+		<P></P>
+		{% endif %}
+		</a>
+		{% endfor %}
+  		</div>
+		{% endif %}
+		{% if fashion %}
+  		<div 
+			id="fashion"
+			class="flex-container">
+		{% for p in fashion %}
+		<a 
+		style="color: black;"
+		href="{{ url_for('product_view', id=p.id)}}">
+		{% if p %}
+    	<div class="product-card">
+			<div class="product-img">
+      			<img src="{{ url_for('uploaded_file', filename=p.image) }}">
+			</div>
+			<div class="product-info">
+				<h3 style="
+				font-size: 10px;
+				font-weight: normal;
+				overflow: hidden;">Product: {{ p.name }}</h3>
+      			<h3 style="
+				font-size: 10px;
+				font-weight: normal;">Price: ₦ {{ p.price }}</h3>
+      			
+			</div>
+    	</div>
+		{% else %}
+		<P></P>
+		{% endif %}
+		</a>
+		{% endfor %}
+  		</div>
+		{% endif %}
+		{% if equipment %}
+  		<div 
+			id="equipment"
+			class="flex-container">
+		{% for p in equipment %}
+		<a 
+		style="color: black;"
+		href="{{ url_for('product_view', id=p.id)}}">
+		{% if equipment %}
+    	<div class="product-card">
+			<div class="product-img">
+      			<img src="{{ url_for('uploaded_file', filename=p.image) }}">
+			</div>
+			<div class="product-info">
+				<h3 style="
+				font-size: 10px;
+				font-weight: normal;
+				overflow: hidden;">Product: {{ p.name }}</h3>
+      			<h3 style="
+				font-size: 10px;
+				font-weight: normal;">Price: ₦ {{ p.price }}</h3>
+      			
+			</div>
+    	</div>
+		{% else %}
+		<P></P>
+		{% endif %}
+		</a>
+		{% endfor %}
+  		</div>
+		{% endif %}
+		{% if automobile %}
+  		<div
+			id="automobile" 
+			class="flex-container">
+		{% for p in automobile %}
+		<a 
+		style="color: black;"
+		href="{{ url_for('product_view', id=p.id)}}">
+		{% if p %}
+    	<div class="product-card">
+			<div class="product-img">
+      			<img src="{{ url_for('uploaded_file', filename=p.image) }}">
+			</div>
+			<div class="product-info">
+				<h3 style="
+				font-size: 10px;
+				font-weight: normal;
+				overflow: hidden;">Product: {{ p.name }}</h3>
+      			<h3 style="
+				font-size: 10px;
+				font-weight: normal;">Price: ₦ {{ p.price }}</h3>
+      			
+			</div>
+    	</div>
+		{% else %}
+		<P></P>
+		{% endif %}
+		</a>
+		{% endfor %}
+  		</div>
+		{% endif %}
+		{% if mobile %}
+  		<div 
+			id="mobile"
+			class="flex-container">
+		{% for p in mobile %}
+		<a 
+		style="color: black;"
+		href="{{ url_for('product_view', id=p.id)}}">
+		{% if p %}
+    	<div class="product-card">
+			<div class="product-img">
+      			<img src="{{ url_for('uploaded_file', filename=p.image) }}">
+			</div>
+			<div class="product-info">
+				<h3 style="
+				font-size: 10px;
+				font-weight: normal;
+				overflow: hidden;">Product: {{ p.name }}</h3>
+      			<h3 style="
+				font-size: 10px;
+				font-weight: normal;">Price: ₦ {{ p.price }}</h3>
+      			
+			</div>
+    	</div>
+		{% else %}
+		<P></P>
+		{% endif %}
+		</a>
+		{% endfor %}
+  		</div>
+		{% endif %}
+		{% if lands %}
+  		<div 
+			id="lands"
+			class="flex-container"> 
+			{% for p in lands %}
+			{% if p %}
+			<a 
+			style="color: black;"
+			href="{{ url_for('product_view', id=p.id)}}">
+    		<div class="product-card">
+				<div class="product-img">
+      				<img src="{{ url_for('uploaded_file', filename=p.image) }}">
+				</div>
+				<div class="product-info">
+					<h3 style="
+					font-size: 10px;
+					font-weight: normal;
+					overflow: hidden;">Product: {{ p.name }}</h3>
+      				<h3 style="
+					font-size: 10px;
+					font-weight: normal;">Price: ₦ {{ p.price }}</h3>
+	
+				</div>
+    		</div>
+			</a>
+			{% else %}
+			<P style="display: none;"></P>
+			{% endif %}
+			{% endfor %}
+  		</div>
+		{% endif %}
+	</div>
+		{% include 'footer.html ' %}
   	<div class="bottom-block">
   	</div>
   <script>

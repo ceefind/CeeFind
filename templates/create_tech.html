@@ -81,7 +81,17 @@
 		 <div>
 			 <a href="{{ url_for('home') }}">🏠</a>
 			 <a href="{{ url_for('add_product') }}">➕</a>
-			 <a href="{{ url_for('profile_page') }}">👤</a>
+			{% if logged_in %}
+			<a href="{{ url_for('profile_page') }}"
+		 		class="{% if active_page == 'profile' %}active{% endif %}">
+		 		👤
+			</a>
+			{% else %}
+			<a href="%"
+		 		class="{% if active_page == 'profile' %}active{% endif %}">
+		 		👤
+			</a>
+			{% endif %}
 		</div>
 	</div>
 	<div class="label">
@@ -125,6 +135,7 @@
 	{{ form.submit }}
 </form>
 	{% else %}
+	{% if logged_in %}
             <p style="font-size: 20px;
                 text-align: center;
                 width: 60%;
@@ -141,9 +152,10 @@
                 text-align: center;
                 border-radius: 10px;
                 padding: 2px;" 
-                href="{{ url_for('verify', email=current_user.email) }}">
+                href="{{ url_for('send_verification_email', email=current_user.email) }}">
                 verify your email
             </a>
+        {% endif %}
         {% endif %}
 	</div>
 	<div class="bottom-block">

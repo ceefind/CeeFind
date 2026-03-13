@@ -19,6 +19,7 @@ from flask_wtf.file import FileAllowed
 from typing import List
 from functools import wraps
 from datetime import date
+import datetime as dt
 from flask_migrate import Migrate
 from flask_dance.contrib.google import make_google_blueprint, google
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
@@ -52,9 +53,6 @@ db.init_app(app)
 migrate = Migrate()
 migrate.init_app(app, db)
 mail.init_app(app)
-#SECRET_KEYS = [os.getenv("FLASK_SECRET_KEY"), os.getenv('OLD_KEY')]
-
-
 
 def send_email(subject, recipients, body, html=None):
     msg=Message(
@@ -107,7 +105,6 @@ def send_verification_email(email):
                 height: 30px;
                 text-align: center;
                 justify-content: center;
-                align-items: center;
                 align-items: center;"
         href="{verify_url}">
         Verify Email
@@ -124,14 +121,10 @@ def send_verification_email(email):
 
     return render_template('verify.html', email=email, count=count)
 
-#html = render_template('verify.html', verify_url=verify_url)
-
 def gravatar(email, size=50):
     email_hash = hashlib.md5(email.lower().encode()).hexdigest()
     return f"https://www.gravatar.com/avatar/{email_hash}?s={size}&d=identicon"
     
-
-
 #configure flask_login
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -272,10 +265,7 @@ class Reported(db.Model):
 with app.app_context():
     db.create_all()
     
-#sivh embi dvti uxma 
-#MAIL = os.getenv('MY_EMAIL')
-#PASSWORD = os.getenv('MY_EMAIL_PASSWORD')
-    
+
 states = [
     "Abia","Adamawa",
     "Akwa Ibom","Anambra"
@@ -297,30 +287,24 @@ states = [
     "Yobe","Zamfara","FCT"
     ]
 
-"""
-country_code = "NG"  # Nigeria
-response = requests.get(f"https://api.example.com/countries/{country_code}/states")
-data = response.json()
-# `data` now holds states, then further fetch each state’s LGAs
-
-<select name="lga">
-  {% for lga in lgas %}
-    <option value="{{ lga }}">{{ lga }}</option>
-  {% endfor %}
-</select>
-"""
     
 career_choices = [
-    ('Choose Career', 'Choose Career'),
-    ('Electrician', 'Electrician'),
-    ('Developer', 'Developer'),
-    ('Mobile Phone Repairer', 'Mobile Phone Repairer'),
-    ('Car Mechanic', 'Car Mechanic'),
+    ('Skill', 'Skill'),
+    ('AC Technician', 'AC Technician'),
     ('Aluminium Tech', 'Aluminium Tech'),
-    ('Welder', 'Welder'),
-    ('Gen Mechanic', 'Gen Mechanic'),
+    ('Building Engineer', 'Building Engineer'),
+    ('Car Engineer', 'Car Engineer'),
+    ('Caterer', 'Caterer'),
+    ('Developer', 'Developer'),
+    ('Electrician/Installer', 'Electrician/Installer'),
+    ('Furniture/Roofer', 'Furniture/Roofer'),
+    ('Gen Engineer', 'Gen Engineer'),
+    ('Hair Stylist/Nail Tech', 'Hair Stylist/Nail Tech'),
+    ('Movers/Loader', 'Movers/Loader'),
+    ('Phone Technician', 'Phone Technician'),
     ('Plumber', 'Plumber'),
-    ('Furniture_Roof', 'Furniture_Roof')
+    ('Surveyor', 'Surveyor'),
+    ('Welder', 'Welder')
 ]
 
 #Forms setup
@@ -420,7 +404,6 @@ def google_login():
     return redirect(url_for("dashboard"))
 
 @app.route("/add_product", methods=["POST", "GET"])
-@login_required
 def add_product():
     post = Product.query.filter_by(is_suspended = True).all()
     form = ProductForm()
@@ -535,15 +518,17 @@ def clear_tech(id):
     return redirect(url_for('suspended_tech'))
 
 @app.route("/create_tech", methods=["GET", "POST"])
-@login_required
+#@login_required
 def create_tech():
     form = TechnicianForm()
     data = User.query.all()
     tech = Technicians.query.all()
     suspended_tech = Technicians.query.filter_by(is_suspended = True).all()
     post = Product.query.filter_by(is_suspended=True).all()
-    profiles = db.session.execute(db.select(Technicians).where(Technicians.email == current_user.email)).scalars().all()
-    
+    if current_user.is_authenticated:
+        profiles = db.session.execute(db.select(Technicians).where(Technicians.email == current_user.email)).scalars().all()
+    else:
+        flash('login to create a profile')
     if form.validate_on_submit():
         photo = request.files["image"]
         filename = None
@@ -594,11 +579,30 @@ def delete_post(id):
     db.session.commit()
     return redirect(url_for('s_l'))
 
-@app.route("/delete_user")
+@app.route("/delete_user/<path:name>")
 @login_required
-def delete_user():
-    name = request.args.get('email')
-    user = User.query.filter_by(email=name).first_or_404()
+def delete_user(name):
+    user = db.session.execute(db.select(User).where(User.email == name)).scalar()
+    if not user:
+        return "user not found"
+    post = Product.query.filter_by(product_id=user.id).all()
+    tech = Technicians.query.filter_by(user_id=user.id).all()
+    report = Reported.query.filter_by(user_id=user.id).scalar()
+    review = Reviews.query.filter_by(user_id=user.id).all()
+    if review:
+        for r in review:
+            if r:
+                db.session.delete(r)
+    if post:
+        for p in post:
+            if p:
+                db.session.delete(p)
+    if tech:
+        for t in tech:
+            if t:
+                db.session.delete(t)
+    if report:
+        db.session.delete(report)
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for('get_accounts'))
@@ -654,12 +658,37 @@ def get_user():
     
 @app.route("/home")
 def home():
+    year = dt.datetime.now().year
     data = User.query.all()
     tech = Technicians.query.all()
+    posts = Product.query.filter_by(is_suspended=False).all()
     post = Product.query.filter_by(is_suspended=True).all()
     suspended_tech = Technicians.query.filter_by(is_suspended= True).all()
-    return render_template("index.html", suspended_tech=suspended_tech, post=post, data=data, tech=tech, logged_in=current_user.is_authenticated, active_page="home")
-    #return render_template("index.html")
+    accessories = [ p for p in posts if p.category == "Accessories"]
+    fashion = [p for p in posts if p.category == "Fashion"]
+    electronics = [p for p in posts if p.category == "Electronics"]
+    equipment = [p for p in posts if p.category == "Equipment"]
+    automobile = [p for p in posts if p.category == "Automobile"]
+    mobile_phone =[p for p in posts if p.category == "Mobile Phone"]
+    land = [p for p in posts if p.category == "Lands/Buildings"]
+
+    return render_template("index.html",
+        year=year,
+        electronics=electronics,
+        automobile=automobile,
+        mobile=mobile_phone,
+        lands=land,
+        equipment=equipment, 
+        accessories=accessories, 
+        fashion=fashion, 
+        posts=posts, 
+        suspended_tech=suspended_tech, 
+        post=post, 
+        data=data, 
+        tech=tech, 
+        logged_in=current_user.is_authenticated, 
+        active_page="home")
+    
     
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -736,7 +765,7 @@ def profile_appeal(id):
     return render_template("appeal.html", form=form, post=tech)
 
 @app.route("/profile_page")
-@login_required
+#@login_required
 def profile_page():
     profile = db.session.execute(db.select(User).where(User.email == current_user.email)).scalar()
     posts = Product.query.filter_by(product_id=current_user.id).all()
@@ -832,13 +861,11 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
-        #print(verify_code)
         return redirect(url_for("s_l"))
     return render_template("register.html", form=register_form)
 
 @app.route("/auto_delete_post/<int:id>")
 @login_required
-#@admin_only
 def reported_post(id):
 
     reporter = Reported.query.filter_by(reporter=current_user, post_id=id).first()
@@ -865,7 +892,6 @@ def reported_post(id):
     
 @app.route("/auto_delete_tech/<int:id>")
 @login_required
-#@admin_only
 def reported_tech(id):
 
     reporter = Reported.query.filter_by(reporter=current_user, tech_id=id).first()
@@ -892,7 +918,6 @@ def reported_tech(id):
 
 @app.route("/auto_delete_user/<int:id>")
 @login_required
-#@admin_only
 def reported_user(id):
     
     if Reported.query.filter_by(user_id=id).count() >= 2:
@@ -996,12 +1021,11 @@ def view_tech():
     user = Technicians.query.filter_by(is_suspended=False).all()
     if not current_user.is_authenticated:
         flash("login to view Technician profile")
-        #return redirect(url_for('view_tech'))
     return render_template("repairs.html", prof=user, logged_in=current_user.is_authenticated)
    
 
 
    
 if __name__=="__main__":
-    app.run(debug=False)
+    app.run(debug=True)
                                                                                                                                 

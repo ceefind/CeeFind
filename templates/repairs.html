@@ -13,28 +13,48 @@
 		 		class="{% if active_page == 'home' %}active{% endif %}">
 		 		🏠
 			</a>
-
 			<a href="{{ url_for('add_product') }}"
 		 		class="{% if active_page == 'add' %}active{% endif %}">
 		 		➕
 			</a>
-
+			{% if logged_in %}
 			<a href="{{ url_for('profile_page') }}"
 		 		class="{% if active_page == 'profile' %}active{% endif %}">
 		 		👤
 			</a>
+			{% else %}
+			<a href="#"
+		 		class="{% if active_page == 'profile' %}active{% endif %}">
+		 		👤
+			</a>
+			{% endif %}
+		</div>
 	</div>
-</div>
-	
-	<div class="register">
-		{% if not logged_in %}
-		<a class="login" href="{{ url_for('login') }}">login</a>
-		<a class="login" href="{{ url_for('register') }}">register</a>
-		{% else %}
-		<a class="login" href="{{ url_for('home') }}">home</a>
-		<a class="login" href="{{ url_for('logout') }}">logout</a>
-		{% endif %}
-	</div>
+    <div class="register">
+		<div 
+		style="
+			display: flex;
+			width: 80%;
+			padding: 5px;
+			justify-content: center;
+			align-items: center;">
+		</div>
+		<div 
+		style="
+			display: flex;
+			flex-direction: row-reverse;
+			width: 20%;
+			padding: 5px;">
+    {% if not logged_in %}
+    	<a class="login" href="{{ url_for('login') }}">login</a>
+    	<a class="login" href="{{ url_for('register') }}">register</a>
+    {% else %}
+    	<a 
+			style="width: auto;"
+			class="login" href="{{ url_for('logout') }}">logout</a>
+    {% endif %}
+		</div>
+  	</div>
 	<div class="label">
 		<div class="hero-text">
 			<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
@@ -47,17 +67,10 @@
 		<a class="nav" href='{{ url_for("view_tech") }}'>Engineers</a>
 	</nav>
 	<div id="status-selector">
-	<select id="jobs">
-			<option value="all">Skill</option>
-			<option value="Electrician">Electrician</option>
-			<option value="Developer">Developer</option>
-			<option value="Baker">Baker</option>
-			<option value="Plumber">Plumber</option>
-			<option value="Car Mechanic">Car Mechanic</option>
-			<option value="Gen Mechanic">Gen Mechanic</option>
-			<option value="Furniture_Roof">Furniture_Roof</option>
-	</select>
-	<select id="states"></select>
+		<select id="jobs">
+		</select>
+		<select id="states">
+		</select>
 	</div>
 	<button style="
 				height: auto;" 
@@ -136,29 +149,58 @@
 		</div>
 	{% endfor %}
 	</div>
+	<div style="
+			display: none;
+			width: 50%;
+			margin: auto;
+			background-color: gray;
+			height: auto;
+			padding: 20px;"
+		id="alternate-response">
+		<p
+			style="
+				display: block;
+				width: 100%;
+				margin: auto;
+				color: yellow;
+				text-align: center;
+				font-weight: bold;
+				font-size: 20px;">
+			No Registerd Technicians in your location at the moment.
+		</p>
+	</div>
 	<div class="bottom-block">
 	</div>
 	<script>
+	const jobs = ['Skill', 'Ac Technician', 'Aluminium Tech', 'Building Engineer', 'Car Engineer', 'Caterer', 'Developer', 'Electrician/Installer', 'Furniture/Roofer', 'Gen Engineer', 'Hair Stylist/Nail Tech', 'Movers/Loader', 'Phone Technician', 'Plumber', 'Surveyor', 'Welder']
 	const states = ["All","Abia","Adamawa","Akwa Ibom","Anambra","Bauchi","Bayelsa","Benue","Bornu","Crossriver","Delta","Ebonyi","Edo","Ekiti","Enugu","Gombe","Imo","Jigawa","Kaduna","Kano","Katsina","Kebbi","Kogi","Kwara","Lagos","Nassarawa","Niger","Ogun","Ondo","Osun","Oyo","Plateau","Rivers","Sokoto","Taraba","Yobe","Zamfara","FCT"]
 	const getState = document.getElementById('states');
+	const getjobs = document.getElementById('jobs')
+	const resp = document.getElementById('alternate-response')
+	
 	states.forEach((state) => {
 		const option = document.createElement('option')
 		option.value = state
 		option.text = state
 		getState.add(option)
-})
-	const selected = document.getElementById('jobs');
-	
+	})
+	jobs.forEach((job) => {
+		const option = document.createElement('option')
+		option.value = job
+		option.text = job
+		getjobs.add(option)
+	})
 
-	selected.addEventListener('change', filterProfiles);
+	getjobs.addEventListener('change', filterProfiles);
 	getState.addEventListener('change', filterProfiles);
 
 	function filterProfiles() {
 		const profile = document.querySelectorAll('.items');
 		profile.forEach((pro) => {
-			const careerMatch = pro.querySelector('.p-details').textContent.includes(selected.value);
+			const careerMatch = pro.querySelector('.p-details').textContent.includes(getjobs.value);
 			const stateMatch = pro.querySelectorAll('.p-details')[1].textContent.includes(getState.value);
-			pro.style.display = (careerMatch || selected.value === 'all') && (stateMatch || getState.value === 'All') ? 'block' : 'none';
+			pro.style.display = (careerMatch || getjobs.value === 'Skill') && (stateMatch || getState.value === 'All') ? 'block' : 'none';
+			resp.style.display = (careerMatch || getjobs.value === 'Skill') && (stateMatch || getState.value === 'All') ? 'none' : 'block';
 		});
 	}
 

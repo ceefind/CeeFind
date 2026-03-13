@@ -90,11 +90,17 @@
                  class="{% if active_page == 'add_product' %}active{% endif %}">
                  ➕
             </a>
-
-            <a href="{{ url_for('profile_page') }}"
-                class="{% if active_page == 'profile' %}active{% endif %}">
-                👤
-            </a>
+			{% if logged_in %}
+			<a href="{{ url_for('profile_page') }}"
+		 		class="{% if active_page == 'profile' %}active{% endif %}">
+		 		👤
+			</a>
+			{% else %}
+			<a href="#"
+		 		class="{% if active_page == 'profile' %}active{% endif %}">
+		 		👤
+			</a>
+			{% endif %}
         </div>
     </div>
     <div class="box-container">
@@ -106,7 +112,11 @@
             {% endif %}
         {% endwith %}
         {% if not logged_in %}
-            <h1>Login to Advertise your product</h1>
+            <h1
+            style="
+            display: flex;
+            justify-self: center;"
+            >Login to Advertise your product</h1>
         {% else %}
         {% if current_user.is_verified %}
             <form 
@@ -151,7 +161,7 @@
                 text-align: center;
                 border-radius: 10px;
                 padding: 2px;" 
-                href="{{ url_for('verify', email=current_user.email) }}">
+                href="{{ url_for('send_verification_email', email=current_user.email) }}">
                 verify your email
             </a>
         {% endif %}

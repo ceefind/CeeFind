@@ -1,0 +1,54 @@
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>CeeFind</h3>
+            <p>Your trusted site for 
+                getting your jobs done quickly 
+                and marketplace for buying and selling 
+                products easily.
+            </p>
+        </div>
+        <div class="footer-section">
+            <h3>Quick links</h3>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                {% if logged_in %}
+                <li><a href="#">About</a></li>
+                <li><a href="{{ url_for('add_product') }}">Advertise product</a></li>
+                <li><a href="{{ url_for('create_tech') }}">Create Work profile</a></li>
+                <li><a href="{{ url_for('view_tech') }}">Get Technician</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('register') }}">Register</a></li>
+                <li><a href="#">Feedback</a></li>
+                {% else %}
+                <li><a href="#">About</a></li>
+                <li><a href="{{ url_for('add_product') }}">Advertise product</a></li>
+                <li><a href="{{ url_for('create_tech') }}">Create Work profile</a></li>
+                <li><a href="{{ url_for('view_tech') }}">Get Technician</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('register') }}">Register</a></li>
+                <li><a href="#">Feedback</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Categories</h3>
+            <ul>
+                <li><a href="#mobile">Phones</a></li>
+                <li><a href="#accessories">Accessories</a></li>
+                <li><a href="#fashion">Fashion</a></li>
+                <li><a href="#automobile">Automobile</a></li>
+                <li><a href="#lands">Lands & Houses</a></li>
+                <li><a href="#electronics">Electronics</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Contact</h3>
+            <p>Email: officialceefind@gmail.com</p>
+            <p><a href="tel: +2347063668121">Phone</a></p>
+        </div>
+        <div class="footer-bottom">
+            &#169 {{ year }}  CeeFind. All rights reserved.
+        </div>
+    </div>
+</footer>

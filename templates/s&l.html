@@ -2,94 +2,148 @@
 
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>CeeFind</title>
-  <link rel="stylesheet" href="static/styles.css">
+	<meta charset="UTF-8">
+	<title>CeeFind</title>
+	<link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
-    <div class="bottom-nav">
-    <div>
-  <a href="{{ url_for('home') }}"
-     class="{% if active_page == 'home' %}active{% endif %}">
-     🏠
-  </a>
+	<div class="bottom-nav">
+		<div>
+			<a href="{{ url_for('home') }}"
+		 	class="{% if active_page == 'home' %}active{% endif %}">
+		 	🏠
+			</a>
 
-  <a href="{{ url_for('add_product') }}"
-     class="{% if active_page == 'add' %}active{% endif %}">
-     ➕
-  </a>
+			<a href="{{ url_for('add_product') }}"
+			 class="{% if active_page == 'add' %}active{% endif %}">
+			 ➕
+			</a>
 
-  <a href="{{ url_for('profile_page') }}"
-     class="{% if active_page == 'profile' %}active{% endif %}">
-     👤
-  </a>
-  </div>
-</div>
-  
-  <div class="register">
-    {% if not logged_in %}
-    <a class="login" href="{{ url_for('login') }}">login</a>
-    <a class="login" href="{{ url_for('register') }}">register</a>
-    {% else %}
-    <a class="login" href="{{ url_for('home') }}">Home</a>
-    <a class="login" href="{{ url_for('logout') }}">Logout</a>
-    {% endif %}
-  </div>
-  <div class="label">
-    <div class="hero-text">
-      <h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
-      <h2 class="def">Exp<span class="span">lore t</span>o get amazing<span class="span"> offers</span></h2>
-    </div>
-  </div>
-  <nav class="navbar">
-    <a class="nav" href="{{ url_for('home') }}">Home</a>
-    <a class="nav" href="{{ url_for('s_l') }}">Sales/Lease</a>
-    <a class="nav" href='{{ url_for("view_tech") }}'>Engineers</a>
-  </nav>
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      {% for message in messages %}
-        <p style="color:red">{{ message }}</p>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-  
-  <a style="
-            text-align:center; 
-            display: block; 
-            margin: auto; 
-            width: 50%; 
-            background-color: black; 
-            color: white; 
-            padding: 10px; 
-            font-size: 20px; 
-            border-radius: 10px;
-            margin-top: 15px;" href="{{ url_for('add_product') }}">Advertise here</a>
-  
-  <div class="random">
-      {% for product in post %}
-    <div class="product-box">
+			<a href="{{ url_for('profile_page') }}"
+			 class="{% if active_page == 'profile' %}active{% endif %}">
+		 	👤
+			</a>
+		</div>
+	</div>
+	<div class="register">
+		<div 
+			style="
+				display: flex;
+				width: 80%;
+				padding: 5px;
+				justify-content: center;
+				align-items: center;">
+			{% if current_user.id == 1 %}
+				<a 
+				class="login" 
+				href="{{ url_for('referral') }}">
+				Active referrals
+			</a>
+				<a 
+				class="login" 
+				href="{{ url_for('get_accounts') }}">
+				<span 
+					class="num-count">
+					{{ data|length }}
+				</span> Accounts
+			</a>
+				<a 
+				class="login" 
+				href="{{ url_for('get_post') }}">
+				<span 
+					class="num-count">
+					{{ post|length }}
+				</span> suspended Post
+			</a>
+			<a 
+				class="login" 
+				href="{{ url_for('suspended_tech') }}">
+				<span 
+					class="num-count">
+					{{ suspended_tech|length }}
+				</span> suspended tech
+			</a>
+				<a 
+				class="login" 
+				href="{{ url_for('get_user') }}">
+				<span 
+					class="num-count">
+					{{ tech|length }}
+				</span> Tech
+			</a>
+			{% endif %}
+		</div>
+		<div 
+			style="
+				display: flex;
+				flex-direction: row-reverse;
+				width: 20%;
+				padding: 5px;">
+			{% if not logged_in %}
+				<a class="login" href="{{ url_for('login') }}">login</a>
+				<a class="login" href="{{ url_for('register') }}">register</a>
+			{% else %}
+				<a 
+				style="width: auto;"
+				class="login" href="{{ url_for('logout') }}">logout</a>
+			{% endif %}
+		</div>
+	</div>
+	<div class="label">
+		<div class="hero-text">
+			<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
+			<h2 class="def">Exp<span class="span">lore t</span>o get amazing<span class="span"> offers</span></h2>
+		</div>
+	</div>
+	<nav class="navbar">
+		<a class="nav" href="{{ url_for('home') }}">Home</a>
+		<a class="nav" href="{{ url_for('s_l') }}">Sales/Lease</a>
+		<a class="nav" href='{{ url_for("view_tech") }}'>Engineers</a>
+	</nav>
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			{% for message in messages %}
+				<p style="color:red">{{ message }}</p>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+	
+	<a style="
+						text-align:center; 
+						display: block; 
+						margin: auto; 
+						width: 50%; 
+						background-color: black; 
+						color: white; 
+						padding: 10px; 
+						font-size: 20px; 
+						border-radius: 10px;
+						margin-top: 15px;" href="{{ url_for('add_product') }}">Advertise here</a>
+	
+	<div class="random">
+			{% for product in post %}
+		<div class="product-box">
 
-      <img src="{{ url_for('uploaded_file', filename=product.image) }}">
-      <p>{{ product.name }}</p>
-      
-      <p style="margin-bottom: 0;">Price:{{ product.price }}</p>
-      <p style="margin-bottom: 0;">Is Negotiable: {{ product.negotiable }}</p>
-      {% if not logged_in %}
-      <a href="#">View details</a>
-      {% else %}
-      {% if current_user.id == 1 %}
-      <a id="delete-post" href="{{ url_for('delete_post', id=product.id) }}">Delete</a>
-      {% endif %}
-      <a href="{{ url_for('product_view', id=product.id) }}">View details</a>
-      {% endif %}
-    </div>
-   {% endfor %}
-  </div>
-  
-  <div class="bottom-block">
-  </div>
-  <script src="script.js"></script>
+			<img src="{{ url_for('uploaded_file', filename=product.image) }}">
+			<p>{{ product.name }}</p>
+			
+			<p style="margin-bottom: 0;">Price:{{ product.price }}</p>
+			<p style="margin-bottom: 0;">Is Negotiable: {{ product.negotiable }}</p>
+			{% if not logged_in %}
+			<a href="{{ url_for('product_view', id=product.id) }}">View details</a>
+			{% else %}
+			{% if current_user.id == 1 %}
+			<a id="delete-post" href="{{ url_for('delete_post', id=product.id) }}">Delete</a>
+			{% endif %}
+			<a href="{{ url_for('product_view', id=product.id) }}">View details</a>
+			{% endif %}
+		</div>
+	 {% endfor %}
+	</div>
+	
+	<div class="bottom-block">
+	</div>
+	<script src="script.js"></script>
 </body>
 </html>
 

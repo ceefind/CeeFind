@@ -6,16 +6,31 @@
 		<link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
-		<div class="register">
-				<a class="home" href="{{ url_for('home') }}">Home</a>
-				<a class="login" href="{{ url_for('login') }}">login</a>
+    <div class="register">
+		<div 
+		style="
+			display: flex;
+			width: 80%;
+			padding: 5px;
+			justify-content: center;
+			align-items: center;">
 		</div>
-		<div class="label">
-			<div class="hero-text">
-				<h1 class="name"><span>C</span>ee<strong><span>f</span></strong>in<span>d</span></h1>
-				<h2 class="def">Re<span class="span">gister</span> to cont<span class="span">inue</span></h2>
-			</div>
+		<div 
+		style="
+			display: flex;
+			flex-direction: row-reverse;
+			width: 20%;
+			padding: 5px;">
+    {% if not logged_in %}
+    	<a class="login" href="{{ url_for('login') }}">login</a>
+    	<a class="login" href="{{ url_for('register') }}">register</a>
+    {% else %}
+    	<a 
+			style="width: auto;"
+			class="login" href="{{ url_for('logout') }}">logout</a>
+    {% endif %}
 		</div>
+  	</div>
 		<div class="box-container">
 		{% with messages = get_flashed_messages() %}
 			{% if messages %}
@@ -25,11 +40,6 @@
 			{% endif %}
 		{% endwith %}
 		<form 
-			style="
-					padding: 20px auto;
-					min-width: 350px;
-					max-width: 600px;
-					"
 			class="login-form"
 			action="{{ url_for('register') }}" 
 			method="post" 
