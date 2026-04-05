@@ -39,7 +39,7 @@ mail = Mail()
 #database setup
 app = Flask(__name__)
 db = SQLAlchemy(model_class=Base)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB_URI")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 
 #email config
 app.config['MAIL_SERVER'] = 'smtp.mailgun.org'
